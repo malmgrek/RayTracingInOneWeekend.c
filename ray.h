@@ -8,4 +8,6 @@ typedef struct {
   Vec3 direction;
 } Ray;
 
+Vec3 ray_at(Ray r, double t);
+
 #endif // RAY_H_

@@ -6,27 +6,32 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-/* Progress bar */
+/* Initialize progress bar */
 char bar[13];
 
-bool hit_sphere(const Point3 center, double radius, const Ray r) {
+/* Check if a ray originating from origin intersects a given sphere */
+double hit_sphere(const Point3 center, double radius, const Ray r) {
   Vec3 oc = sub(r.origin, center);
   double a = dot(r.direction, r.direction);
   double b = 2.0 * dot(oc, r.direction);
   double c = dot(oc, oc) - radius * radius;
-  double discriminant = b * b - 4 * a * c;
-  return (discriminant > 0);
+  double discr = b * b - 4 * a * c;
+  // If ray hits sphere, return positive root, otherwise -1.0
+  return (discr < 0) ? -1.0 : (-b - sqrt(discr)) / (2.0 * a);
 }
 
 Color ray_color(const Ray r) {
   Vec3 center = { 0, 0, -1 };
   double radius = 0.5;
-  if (hit_sphere(center, radius, r)) {
-    Color color = { 1.0, 0.0, 0.0 };
-    return color;
+  double t = hit_sphere(center, radius, r);
+  // If ray hits sphere, add shading using unit normal
+  if (t > 0.0) {
+    Vec3 normal = unit_vector(sub(ray_at(r, t), center));
+    Color color = { normal.x + 1.0, normal.y + 1.0, normal.z + 1.0 };
+    return mul(0.5, color);
   }
-  Vec3 u = unit_vector(r.direction);
-  double t = 0.5 * (u.y + 1.0);
+  Vec3 unit = unit_vector(r.direction);
+  t = 0.5 * (unit.y + 1.0);
   Color white = { 1.0, 1.0, 1.0 };
   Color lightblue = { 0.5, 0.7, 1.0 };
   Color color = add(mul(1.0 - t, white), mul(t, lightblue));

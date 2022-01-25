@@ -1,8 +1,12 @@
 #include "vec3.h"
 
-double norm_squared(Vec3 u) {
-  double t = u.x * u.x + u.y * u.y + u.z * u.z;
+double dot(Vec3 u, Vec3 v) {
+  double t = u.x * v.x + u.y * v.y + u.z * v.z;
   return t;
+}
+
+double norm_squared(Vec3 u) {
+  return dot(u, u);
 }
 
 double norm(Vec3 u) {
@@ -29,9 +33,4 @@ Vec3 add(Vec3 u, Vec3 v) {
 Vec3 sub(Vec3 u, Vec3 v) {
   Vec3 w = { u.x - v.x, u.y - v.y, u.z - v.z };
   return w;
-}
-
-double dot(Vec3 u, Vec3 v) {
-  double t = u.x * v.x + u.y * v.y + u.z * v.z;
-  return t;
 }
