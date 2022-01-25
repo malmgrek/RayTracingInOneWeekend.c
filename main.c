@@ -1,23 +1,22 @@
+#include "color.h"
+#include "vec3.h"
+
 #include <stdio.h>
 
 
 char *progress_bar(char *bar, double rate) {
   bar[0] = '[';
-  for (int i = 1; i <= 10; i++) {
-    if ((double) i / 10.0 <= rate) {
-      bar[i] = '=';
-    } else {
-      bar[i] = ' ';
-    }
-  }
   bar[11] = ']';
+  for (int i = 1; i <= 10; i++) {
+    bar[i] = (double) i / 10.0 <= rate ? '=' : ' ';
+  }
   return bar;
 }
 
 
 int main() {
 
-  char bar[12];
+  char bar[13];
 
   // Image
   const int image_width = 256;
@@ -31,15 +30,14 @@ int main() {
       fprintf(stderr, "\r%s", progress_bar(bar, 1.0 - (double) j / image_height));
       fflush(stdout);
 
-      double r = (double) i / (image_width - 1);
-      double g = (double) j / (image_height - 1);
-      double b = 0.25;
+      Color pixel_color = {
+        (double) i / (image_width - 1),
+        (double) j / (image_height - 1),
+        0.25
+      };
 
-      int ir = (int) (255.999 * r);
-      int ib = (int) (255.999 * b);
-      int ig = (int) (255.999 * g);
+      write_color(pixel_color);
 
-      printf("%d %d %d\n", ir, ig, ib);
     }
   }
 
