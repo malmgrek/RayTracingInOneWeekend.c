@@ -1,6 +1,6 @@
 #include "ray.h"
 
-Vec3 ray_at(Ray r, double t) {
-  Vec3 u = add(r.origin, mul(t, r.direction));
+vec3_t ray_at(ray_t r, double t) {
+  vec3_t u = add(r.origin, mul(t, r.direction));
   return u;
 }
