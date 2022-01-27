@@ -22,23 +22,18 @@ bool sphere_hit(sphere_t *sphere, const ray_t ray, double t_min, double t_max) {
       return false;
   }
 
-  sphere->hittable.t = root;
-  sphere->hittable.p = ray_at(ray, sphere->hittable.t);
-  sphere->hittable.normal = mul(1 / sphere->radius,
-                                sub(sphere->hittable.p, sphere->center));
+  sphere->t = root;
+  sphere->p = ray_at(ray, sphere->t);
+  sphere->normal = mul(1 / sphere->radius,
+                       sub(sphere->p, sphere->center));
 
+  // Deduce and set face normal direction
   vec3_t outward_normal = mul(1 / sphere->radius,
-                              sub(sphere->hittable.p, sphere->center));
-  set_face_normal(&sphere->hittable, ray, outward_normal);
+                              sub(sphere->p, sphere->center));
+  sphere->front_face = dot(ray.direction, outward_normal) < 0.0;
+  sphere->normal = sphere->front_face ?
+    outward_normal : mul(-1.0, outward_normal);
 
   return true;
 
-}
-
-void set_face_normal(hittable_t *hittable,
-                     const ray_t ray,
-                     const vec3_t outward_normal) {
-  hittable->front_face = dot(ray.direction, outward_normal) < 0.0;
-  hittable->normal = hittable->front_face ?
-    outward_normal : mul(-1.0, outward_normal);
 }

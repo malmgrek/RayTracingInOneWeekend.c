@@ -2,6 +2,7 @@
 #define UTILS_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 
 void progress_bar(char *bar, double rate);
 

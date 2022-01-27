@@ -20,7 +20,7 @@ char bar[13];
 /* } */
 
 // TODO: Take hit boolean as input instead (different from C++)
-color_t ray_color(const ray_t ray, hittable_t hittable, bool did_hit) {
+color_t ray_color(const ray_t ray, bool did_hit, vec3_t normal) {
   /* vec3_t center = { 0, 0, -1 }; */
   /* double radius = 0.5; */
   /* double t = hit_sphere(center, radius, ray); */
@@ -32,9 +32,9 @@ color_t ray_color(const ray_t ray, hittable_t hittable, bool did_hit) {
   /* } */
   if (did_hit) {
     color_t color = {
-      hittable.normal.x + 1.0,
-      hittable.normal.y + 1.0,
-      hittable.normal.z + 1.0
+      normal.x + 1.0,
+      normal.y + 1.0,
+      normal.z + 1.0
     };
     return mul(0.5, color);
   }
@@ -82,7 +82,7 @@ int main() {
   /* spheres[1]->center = center1; */
   /* spheres[1]->radius = 100.0; */
 
-  sphere_t *sphere;
+  sphere_t *sphere = calloc(1, sizeof(sphere_t));
   vec3_t center = {0.0, 0.0, -1.0};
   sphere->center = center;
   sphere->radius = 0.5;
@@ -117,5 +117,7 @@ int main() {
 
     }
   }
+
+  free(sphere);
 
 }
