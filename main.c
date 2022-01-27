@@ -105,13 +105,8 @@ int main() {
 
       for (int k = 0; k < 1; ++k) {
         bool did_hit = sphere_hit(sphere, ray, 0.0, 1000000000.0);
-        // pixel_color = ray_color(ray, spheres[k]->hittable, did_hit);
-        pixel_color.x = (double) did_hit;
-        pixel_color.y = 0.0;
-        pixel_color.z = 0.0;
+        pixel_color = ray_color(ray, did_hit, sphere->normal);
       }
-
-      // pixel_color = ray_color(ray);
 
       write_color(pixel_color);
 
