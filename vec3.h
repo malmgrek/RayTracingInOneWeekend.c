@@ -2,7 +2,7 @@
 #define VEC3_H_
 
 #include <math.h>
-#include <stdio.h>
+#include <stdarg.h>
 
 typedef struct {
   double x;
