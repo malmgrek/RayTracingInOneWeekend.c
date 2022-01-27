@@ -7,41 +7,16 @@
 /* Initialize progress bar */
 char bar[13];
 
-/* /\* Check if a ray originating from origin intersects a given sphere *\/ */
-/* // TODO: This is to be replaced with the function sphere_hit */
-/* double hit_sphere(const vec3_t center, double radius, const ray_t ray) { */
-/*   vec3_t oc = sub(ray.origin, center); */
-/*   double a = norm_squared(ray.direction); */
-/*   double half_b = dot(oc, ray.direction); */
-/*   double c = norm_squared(oc) - radius * radius; */
-/*   double discr = half_b * half_b - a * c; */
-/*   // If ray hits sphere, return positive root, otherwise -1.0 */
-/*   return (discr < 0) ? -1.0 : (-half_b - sqrt(discr)) / a; */
-/* } */
+const color_t white = { 1.0, 1.0, 1.0 };
+const color_t lightblue = { 0.5, 0.7, 1.0 };
 
-// TODO: Take hit boolean as input instead (different from C++)
 color_t ray_color(const ray_t ray, bool did_hit, vec3_t normal) {
-  /* vec3_t center = { 0, 0, -1 }; */
-  /* double radius = 0.5; */
-  /* double t = hit_sphere(center, radius, ray); */
-  /* // If ray hits sphere, add shading using unit normal */
-  /* if (t > 0.0) { */
-  /*   vec3_t normal = unit_vector(sub(ray_at(ray, t), center)); */
-  /*   color_t color = { normal.x + 1.0, normal.y + 1.0, normal.z + 1.0 }; */
-  /*   return mul(0.5, color); */
-  /* } */
   if (did_hit) {
-    color_t color = {
-      normal.x + 1.0,
-      normal.y + 1.0,
-      normal.z + 1.0
-    };
+    color_t color = { normal.x + 1.0, normal.y + 1.0, normal.z + 1.0 };
     return mul(0.5, color);
   }
   vec3_t unit = unit_vector(ray.direction);
   double t = 0.5 * (unit.y + 1.0);
-  color_t white = { 1.0, 1.0, 1.0 };
-  color_t lightblue = { 0.5, 0.7, 1.0 };
   color_t color = add(mul(1.0 - t, white), mul(t, lightblue));
   return color;
 }
@@ -73,19 +48,18 @@ int main() {
   // in the main loop. In C, we can't do so. Instead, we create a list
   // of structs beforehand, and loop them explicitly.
 
-  /* const int num_spheres = 2; */
-  /* sphere_t *spheres[num_spheres]; */
-  /* vec3_t center0 = { 0.0, 0.0, -1.0 }; */
-  /* spheres[0]->center = center0; */
-  /* spheres[0]->radius = 0.5; */
-  /* vec3_t center1 = { 0.0, -100.5, -1.0 }; */
-  /* spheres[1]->center = center1; */
-  /* spheres[1]->radius = 100.0; */
+  const int num_spheres = 2;
+  sphere_t *spheres = calloc(num_spheres, sizeof(sphere_t));
+  vec3_t center0 = { 0.0, 0.0, -1.0 };
+  spheres[0].center = center0;
+  spheres[0].radius = 0.5;
+  vec3_t center1 = { 0.0, -100.5, -1.0 };
+  spheres[1].center = center1;
+  spheres[1].radius = 100.0;
 
-  sphere_t *sphere = calloc(1, sizeof(sphere_t));
-  vec3_t center = {0.0, 0.0, -1.0};
-  sphere->center = center;
-  sphere->radius = 0.5;
+  bool hit;
+  double t_max;
+  double t_min = 0.0;
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -103,16 +77,22 @@ int main() {
                              sub(mul(v, vertical), origin));
       ray_t ray = { origin, direction };
 
-      for (int k = 0; k < 1; ++k) {
-        bool did_hit = sphere_hit(sphere, ray, 0.0, 1000000000.0);
-        pixel_color = ray_color(ray, did_hit, sphere->normal);
+      t_max = 10000000.0;
+      int l = 0;
+      int count = 0;
+      for (int k = 0; k < num_spheres; ++k) {
+        hit = sphere_hit(&spheres[k], ray, t_min, t_max);
+        if (hit) {
+          t_max = spheres[k].t;
+          count += 1;
+          l = k;
+        }
+        pixel_color = ray_color(ray, count > 0, spheres[l].normal);
       }
-
       write_color(pixel_color);
-
     }
   }
 
-  free(sphere);
+  free(spheres);
 
 }
