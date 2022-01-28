@@ -57,9 +57,7 @@ int main() {
   spheres[1].center = center1;
   spheres[1].radius = 100.0;
 
-  bool hit;
-  double t_max;
-  double t_min = 0.0;
+  hit_record_t *record = calloc(1, sizeof(hit_record_t));
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -77,22 +75,17 @@ int main() {
                              sub(mul(v, vertical), origin));
       ray_t ray = { origin, direction };
 
-      t_max = 10000000.0;
-      int l = 0;
-      int count = 0;
+      record->t = 10000000.0;
+      record->count = 0;
       for (int k = 0; k < num_spheres; ++k) {
-        hit = sphere_hit(&spheres[k], ray, t_min, t_max);
-        if (hit) {
-          t_max = spheres[k].t;
-          count += 1;
-          l = k;
-        }
-        pixel_color = ray_color(ray, count > 0, spheres[l].normal);
+        sphere_hit(record, spheres[k], ray, 0.0, record->t);
       }
+      pixel_color = ray_color(ray, record->count > 0, record->normal);
       write_color(pixel_color);
     }
   }
 
   free(spheres);
+  free(record);
 
 }
