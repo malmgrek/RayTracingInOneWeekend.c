@@ -18,11 +18,18 @@ typedef struct {
   double radius;
 } sphere_t;
 
-bool sphere_hit(hit_record_t *record,
+typedef struct {
+  sphere_t *spheres;
+  int num_spheres;
+} world_t;
+
+bool sphere_hit(hit_record_t *red,
                 sphere_t sphere,
                 const ray_t ray,
                 double t_min,
                 double t_max);
+
+hit_record_t hit(const ray_t ray, world_t world);
 
 // NOTE: Define other shapes by defining type & hit-function pairs
 

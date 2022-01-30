@@ -11,10 +11,24 @@ char bar[13];
 const color_t white = { 1.0, 1.0, 1.0 };
 const color_t lightblue = { 0.5, 0.7, 1.0 };
 
-color_t ray_color(const ray_t ray, bool did_hit, vec3_t normal) {
-  if (did_hit) {
-    color_t color = { normal.x + 1.0, normal.y + 1.0, normal.z + 1.0 };
-    return mul(0.5, color);
+color_t ray_color(const ray_t ray, world_t world, int depth) {
+
+  // spheres_hit(rec, ray, world, num_spheres);
+
+  // If we've exceeded the ray bounce limit, no more light is gathered.
+  if (depth <= 0) {
+    color_t color = { 0.0, 0.0, 0.0 };
+    return color;
+  }
+
+  hit_record_t rec = hit(ray, world);
+
+  if (rec.count > 0) {
+    vec3_t target = add(add(rec.p, rec.normal), random_in_unit_sphere());
+    ray_t ray_new;
+    ray_new.origin = rec.p;
+    ray_new.direction = sub(target, rec.p);
+    return mul(0.5, ray_color(ray_new, world, depth-1));
   }
   vec3_t unit = unit_vector(ray.direction);
   double t = 0.5 * (unit.y + 1.0);
@@ -29,6 +43,7 @@ int main() {
   const int image_width = 400;
   const int image_height = (int) (image_width / aspect_ratio);
   const int samples_per_pixel = 100;
+  const int max_depth = 50;
 
   /* Camera */
   camera_t cam = create_default_camera();
@@ -38,16 +53,19 @@ int main() {
   // in the main loop. In C, we can't do so. Instead, we create a list
   // of structs beforehand, and loop them explicitly.
 
-  const int num_spheres = 2;
-  sphere_t *spheres = calloc(num_spheres, sizeof(sphere_t));
+  // sphere_t *spheres = calloc(2, sizeof(sphere_t));
+  sphere_t spheres[2];
   vec3_t center0 = { 0.0, 0.0, -1.0 };
   spheres[0].center = center0;
   spheres[0].radius = 0.5;
   vec3_t center1 = { 0.0, -100.5, -1.0 };
   spheres[1].center = center1;
   spheres[1].radius = 100.0;
+  world_t world;
+  world.spheres = spheres;
+  world.num_spheres = 2;
 
-  hit_record_t *record = calloc(1, sizeof(hit_record_t));
+  // hit_record_t *rec = calloc(1, sizeof(hit_record_t));
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -60,23 +78,14 @@ int main() {
 
       color_t pixel_color = { 0.0, 0.0, 0.0 };
       for (int s = 0; s < samples_per_pixel; ++s) {
-        double u = ((double) i + random_double()) / (image_width - 1);
-        double v = ((double) j + random_double()) / (image_height - 1);
+        double u = ((double) i + random_double_unit()) / (image_width - 1);
+        double v = ((double) j + random_double_unit()) / (image_height - 1);
         ray_t ray = get_ray(cam, u, v);
-
-        record->t = 10000000.0;
-        record->count = 0;
-        for (int k = 0; k < num_spheres; ++k) {
-          sphere_hit(record, spheres[k], ray, 0.0, record->t);
-        }
-        pixel_color = add(pixel_color, ray_color(ray, record->count > 0, record->normal));
+        pixel_color = add(pixel_color, ray_color(ray, world, max_depth));
       }
       write_color(pixel_color, samples_per_pixel);
 
     }
   }
-
-  free(spheres);
-  free(record);
 
 }

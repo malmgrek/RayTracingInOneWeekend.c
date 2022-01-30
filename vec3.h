@@ -4,6 +4,8 @@
 #include <math.h>
 #include <stdarg.h>
 
+#include "utils.h"
+
 typedef struct {
   double x;
   double y;
@@ -24,5 +26,8 @@ void print_vector(vec3_t u);
 double dot(vec3_t u, vec3_t v);
 vec3_t cross(vec3_t u, vec3_t v);
 vec3_t unit_vector(vec3_t direction);
+vec3_t random_vector_unit();
+vec3_t random_vector(double min, double max);
+vec3_t random_in_unit_sphere();
 
 #endif // VEC3_H_

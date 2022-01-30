@@ -6,10 +6,10 @@ void write_color(color_t pixel_color, int samples_per_pixel) {
   double b = pixel_color.z;
 
   // Divide the color by the number of samples
-  double scale = 1.0 / (double) samples_per_pixel;
-  r *= scale;
-  g *= scale;
-  b *= scale;
+  double scale = 1.0 / samples_per_pixel;
+  r = sqrt(scale * r);
+  g = sqrt(scale * g);
+  b = sqrt(scale * b);
 
   printf("%d %d %d\n",
          (int) (255.999 * clamp(r, 0.0, 0.999)),

@@ -20,6 +20,27 @@ vec3_t unit_vector(vec3_t direction) {
   return v;
 }
 
+vec3_t random_vector_unit() {
+  vec3_t u = { random_double_unit(), random_double_unit(), random_double_unit() };
+  return u;
+}
+
+vec3_t random_vector(double min, double max) {
+  vec3_t u = { random_double(min, max),
+               random_double(min, max),
+               random_double(min, max) };
+  return u;
+}
+
+vec3_t random_in_unit_sphere() {
+  vec3_t p = random_vector(-1, 1);
+  if (norm_squared(p) < 1.0) {
+    return p;
+  } else {
+    return random_in_unit_sphere();
+  }
+}
+
 vec3_t mul(double t, vec3_t u) {
   vec3_t v = { t * u.x, t * u.y, t * u.z };
   return v;

@@ -1,7 +1,6 @@
 #include "hittable.h"
 
-// NOTE: t_min = 0, t_max = INFINITY
-bool sphere_hit(hit_record_t *record,
+bool sphere_hit(hit_record_t *rec,
                 sphere_t sphere,
                 const ray_t ray,
                 double t_min,
@@ -27,21 +26,34 @@ bool sphere_hit(hit_record_t *record,
     return false;
   }
 
-  record->t = root;
-  record->p = ray_at(ray, root);
-  record->normal = mul(1 / sphere.radius,
-                       sub(record->p, sphere.center));
+  rec->t = root;
+  rec->p = ray_at(ray, root);
+  rec->normal = mul(1 / sphere.radius,
+                    sub(rec->p, sphere.center));
 
   vec3_t outward_normal = mul(1 / sphere.radius,
-                              sub(record->p, sphere.center));
-  record->front_face = dot(ray.direction, outward_normal) < 0.0;
-  record->normal = record->front_face ?
+                              sub(rec->p, sphere.center));
+  rec->front_face = dot(ray.direction, outward_normal) < 0.0;
+  rec->normal = rec->front_face ?
     outward_normal : mul(-1.0, outward_normal);
 
 
   // Count as hit if all ok
-  record->count += 1;
+  rec->count += 1;
 
   return true;
 
+}
+
+hit_record_t hit(const ray_t ray, world_t world) {
+  // TODO / FIXME: Ugly mutative function, could we improve sphere_hit?
+  hit_record_t *acc = calloc(1, sizeof(hit_record_t));
+  acc->t = 1.0e12;
+  acc->count = 0;
+  for (int i = 0; i < world.num_spheres; ++i) {
+    sphere_hit(acc, world.spheres[i], ray, 0.0, acc->t);
+  }
+  hit_record_t rec = *acc;
+  free(acc);
+  return rec;
 }
