@@ -1,3 +1,4 @@
+#include "camera.h"
 #include "color.h"
 #include "hittable.h"
 #include "ray.h"
@@ -23,25 +24,14 @@ color_t ray_color(const ray_t ray, bool did_hit, vec3_t normal) {
 
 int main() {
 
-  color_t pixel_color;
-
   /* Image */
   const double aspect_ratio = 16.0 / 9.0;
   const int image_width = 400;
   const int image_height = (int) (image_width / aspect_ratio);
+  const int samples_per_pixel = 100;
 
   /* Camera */
-  double viewport_height = 2.0;
-  double viewport_width = aspect_ratio * viewport_height;
-  double focal_length = 1.0;
-  vec3_t focal = { 0.0, 0.0, focal_length };
-
-  vec3_t origin = { 0.0, 0.0, 0.0 };
-  vec3_t horizontal = { viewport_width, 0.0,             0.0 };
-  vec3_t vertical =   { 0.0,            viewport_height, 0.0 };
-  // origin - horizontal/2 - vertical/2 - focal
-  vec3_t lower_left_corner = sub(sub(origin, mul(0.5, horizontal)),
-                               add(mul(0.5, vertical), focal));
+  camera_t cam = create_default_camera();
 
   // NOTE: In C++ one can use shared pointers to wrap a list of
   // hittable objects (possible different) to a list that is looped over
@@ -68,20 +58,21 @@ int main() {
       progress_bar(bar, 1.0 - (double) j / image_height);
       /* ------------------------------------------------------------------------- */
 
-      double u = (double) i / (image_width - 1);
-      double v = (double) j / (image_height - 1);
-      // direction = lower_left_corner + u * horizontal + v * vertical - origin
-      vec3_t direction = add(add(lower_left_corner, mul(u, horizontal)),
-                             sub(mul(v, vertical), origin));
-      ray_t ray = { origin, direction };
+      color_t pixel_color = { 0.0, 0.0, 0.0 };
+      for (int s = 0; s < samples_per_pixel; ++s) {
+        double u = ((double) i + random_double()) / (image_width - 1);
+        double v = ((double) j + random_double()) / (image_height - 1);
+        ray_t ray = get_ray(cam, u, v);
 
-      record->t = 10000000.0;
-      record->count = 0;
-      for (int k = 0; k < num_spheres; ++k) {
-        sphere_hit(record, spheres[k], ray, 0.0, record->t);
+        record->t = 10000000.0;
+        record->count = 0;
+        for (int k = 0; k < num_spheres; ++k) {
+          sphere_hit(record, spheres[k], ray, 0.0, record->t);
+        }
+        pixel_color = add(pixel_color, ray_color(ray, record->count > 0, record->normal));
       }
-      pixel_color = ray_color(ray, record->count > 0, record->normal);
-      write_color(pixel_color);
+      write_color(pixel_color, samples_per_pixel);
+
     }
   }
 

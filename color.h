@@ -6,6 +6,6 @@
 
 typedef vec3_t color_t;
 
-void write_color(color_t pixel_color);
+void write_color(color_t pixel_color, int samples_per_pixel);
 
 #endif // COLOR_H_
