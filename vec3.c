@@ -71,6 +71,6 @@ bool near_zero(vec3_t u) {
 }
 
 vec3_t reflect(vec3_t u, vec3_t n) {
-  vec3_t v = sub(v, mul(2.0 * dot(u, n), n));
+  vec3_t v = sub(u, mul(2.0 * dot(u, n), n));
   return v;
 }
