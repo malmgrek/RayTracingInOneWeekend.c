@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void progress_bar(char *bar, double rate);
 double degrees_to_radians(double degrees);

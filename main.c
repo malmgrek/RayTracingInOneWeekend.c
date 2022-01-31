@@ -5,37 +5,74 @@
 #include "utils.h"
 #include "vec3.h"
 
-/* Initialize progress bar */
-char bar[13];
-
-const color_t white = { 1.0, 1.0, 1.0 };
-const color_t lightblue = { 0.5, 0.7, 1.0 };
-
 color_t ray_color(const ray_t ray, world_t world, int depth) {
 
   // If we've exceeded the ray bounce limit, no more light is gathered.
   if (depth <= 0) {
-    color_t color = { 0.0, 0.0, 0.0 };
-    return color;
+    return black;
   }
 
   hit_record_t rec = hit(ray, world);
 
   if (rec.count > 0) {
-    vec3_t target = add(add(rec.p, rec.normal),
-                        random_on_unit_sphere());
-    ray_t ray_new;
-    ray_new.origin = rec.p;
-    ray_new.direction = sub(target, rec.p);
-    return mul(0.5, ray_color(ray_new, world, depth-1));
+    color_t attenuation;
+    ray_t scattered;
+    if (scatter(ray, rec, &attenuation, &scattered)) {
+      return emul(attenuation, ray_color(scattered, world, depth-1));
+    }
+    return black;
   }
+
   vec3_t unit = unit_vector(ray.direction);
   double t = 0.5 * (unit.y + 1.0);
   color_t color = add(mul(1.0 - t, white), mul(t, lightblue));
   return color;
+
+}
+
+void init_world(world_t *world, sphere_t *spheres) {
+
+  // Sphere center points
+  vec3_t center;
+  double xs[4] = { 0.0, 0.0, -1.0, 1.0 };
+  double ys[4] = { -100.5, 0.0, 0.0, 0.0 };
+  double zs[4] = { -1.0, -1.0, -1.0, -1.0 };
+  double radii[4] = { 100.0, 0.5, 0.5, 0.5 };
+
+  // Sphere materials
+  material_t material;
+  vec3_t albedo;
+  double rs[4] = { 0.8, 0.7, 0.8, 0.8 };
+  double gs[4] = { 0.8, 0.3, 0.8, 0.6 };
+  double bs[4] = { 0.0, 0.3, 0.8, 0.2 };
+  int classes[4] = { 1, 1, 2, 2 };
+
+  for (int i = 0; i < 4; ++i) {
+
+    center.x = xs[i];
+    center.y = ys[i];
+    center.z = zs[i];
+
+    albedo.x = rs[i];
+    albedo.y = gs[i];
+    albedo.z = bs[i];
+    material.albedo = albedo;
+    material.class = classes[i];
+
+    spheres[i].center = center;
+    spheres[i].radius = radii[i];
+    spheres[i].material = material;
+
+  }
+
+  world->spheres = spheres;
+
 }
 
 int main() {
+
+  /* Initialize progress bar */
+  char bar[13];
 
   /* Image */
   const double aspect_ratio = 16.0 / 9.0;
@@ -47,21 +84,15 @@ int main() {
   /* Camera */
   camera_t cam = create_default_camera();
 
-  // NOTE: In C++ one can use shared pointers to wrap a list of
-  // hittable objects (possible different) to a list that is looped over
-  // in the main loop. In C, we can't do so. Instead, we create a list
-  // of structs beforehand, and loop them explicitly.
+  // NOTE: In C++ one can use shared pointers to wrap a list of hittable objects
+  // (possible different ones) to a list that is looped over in the main loop.
+  // In C, we can't do so. Instead, we create a list of structs beforehand, and
+  // loop them explicitly.
 
-  sphere_t spheres[2];
-  vec3_t center0 = { 0.0, 0.0, -1.0 };
-  spheres[0].center = center0;
-  spheres[0].radius = 0.5;
-  vec3_t center1 = { 0.0, -100.5, -1.0 };
-  spheres[1].center = center1;
-  spheres[1].radius = 100.0;
   world_t world;
-  world.spheres = spheres;
-  world.num_spheres = 2;
+  world.num_spheres = 4;
+  sphere_t spheres[world.num_spheres];
+  init_world(&world, spheres);
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);

@@ -29,6 +29,11 @@ vec3_t sub(vec3_t u, vec3_t v) {
   return w;
 }
 
+vec3_t emul(vec3_t u, vec3_t v) {
+  vec3_t w = { u.x * v.x, u.y * v.y, u.z * v.z };
+  return w;
+}
+
 vec3_t unit_vector(vec3_t direction) {
   double t = norm(direction);
   vec3_t v = { direction.x / t, direction.y / t, direction.z / t };
@@ -58,4 +63,14 @@ vec3_t random_in_unit_sphere() {
 
 vec3_t random_on_unit_sphere() {
   return unit_vector(random_in_unit_sphere());
+}
+
+bool near_zero(vec3_t u) {
+  const double eps = 1e-8;
+  return (fabs(u.x) < eps) && (fabs(u.y) < eps) && (fabs(u.z) < eps);
+}
+
+vec3_t reflect(vec3_t u, vec3_t n) {
+  vec3_t v = sub(v, mul(2.0 * dot(u, n), n));
+  return v;
 }
