@@ -82,7 +82,9 @@ bool scatter_metal(ray_t ray_in,
                    ray_t *scattered) {
   vec3_t reflected = reflect(unit_vector(ray_in.direction), rec.normal);
   scattered->origin = rec.p;
-  scattered->direction = reflected;
+  scattered->direction = add(reflected,
+                             mul(rec.material.fuzz,
+                                 random_in_unit_sphere()));
   *attenuation = rec.material.albedo;
   return (dot(reflected, rec.normal) > 0.0);
 }

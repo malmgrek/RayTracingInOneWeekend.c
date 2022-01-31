@@ -6,6 +6,7 @@
 #include "utils.h"
 
 typedef struct {
+  double fuzz;
   color_t albedo;
   // 1: Lambertian
   // 2: Metal
