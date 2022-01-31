@@ -13,8 +13,6 @@ const color_t lightblue = { 0.5, 0.7, 1.0 };
 
 color_t ray_color(const ray_t ray, world_t world, int depth) {
 
-  // spheres_hit(rec, ray, world, num_spheres);
-
   // If we've exceeded the ray bounce limit, no more light is gathered.
   if (depth <= 0) {
     color_t color = { 0.0, 0.0, 0.0 };
@@ -24,7 +22,8 @@ color_t ray_color(const ray_t ray, world_t world, int depth) {
   hit_record_t rec = hit(ray, world);
 
   if (rec.count > 0) {
-    vec3_t target = add(add(rec.p, rec.normal), random_in_unit_sphere());
+    vec3_t target = add(add(rec.p, rec.normal),
+                        random_in_unit_sphere());
     ray_t ray_new;
     ray_new.origin = rec.p;
     ray_new.direction = sub(target, rec.p);
@@ -41,7 +40,7 @@ int main() {
   /* Image */
   const double aspect_ratio = 16.0 / 9.0;
   const int image_width = 400;
-  const int image_height = (int) (image_width / aspect_ratio);
+  const int image_height = (int) image_width / aspect_ratio;
   const int samples_per_pixel = 100;
   const int max_depth = 50;
 
@@ -53,7 +52,6 @@ int main() {
   // in the main loop. In C, we can't do so. Instead, we create a list
   // of structs beforehand, and loop them explicitly.
 
-  // sphere_t *spheres = calloc(2, sizeof(sphere_t));
   sphere_t spheres[2];
   vec3_t center0 = { 0.0, 0.0, -1.0 };
   spheres[0].center = center0;
@@ -64,8 +62,6 @@ int main() {
   world_t world;
   world.spheres = spheres;
   world.num_spheres = 2;
-
-  // hit_record_t *rec = calloc(1, sizeof(hit_record_t));
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -78,8 +74,8 @@ int main() {
 
       color_t pixel_color = { 0.0, 0.0, 0.0 };
       for (int s = 0; s < samples_per_pixel; ++s) {
-        double u = ((double) i + random_double_unit()) / (image_width - 1);
-        double v = ((double) j + random_double_unit()) / (image_height - 1);
+        double u = (i + random_double_unit()) / (image_width - 1);
+        double v = (j + random_double_unit()) / (image_height - 1);
         ray_t ray = get_ray(cam, u, v);
         pixel_color = add(pixel_color, ray_color(ray, world, max_depth));
       }

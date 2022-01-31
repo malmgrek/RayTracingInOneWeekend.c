@@ -37,7 +37,6 @@ bool sphere_hit(hit_record_t *rec,
   rec->normal = rec->front_face ?
     outward_normal : mul(-1.0, outward_normal);
 
-
   // Count as hit if all ok
   rec->count += 1;
 
@@ -48,10 +47,12 @@ bool sphere_hit(hit_record_t *rec,
 hit_record_t hit(const ray_t ray, world_t world) {
   // TODO / FIXME: Ugly mutative function, could we improve sphere_hit?
   hit_record_t *acc = calloc(1, sizeof(hit_record_t));
-  acc->t = 1.0e12;
+  acc->t = 1.0e12;  // INFINITY
   acc->count = 0;
   for (int i = 0; i < world.num_spheres; ++i) {
-    sphere_hit(acc, world.spheres[i], ray, 0.0, acc->t);
+    // NOTE: Adding non-zero t_min has a huge effect on the image
+    // darkness
+    sphere_hit(acc, world.spheres[i], ray, 1.0e-3, acc->t);
   }
   hit_record_t rec = *acc;
   free(acc);
