@@ -23,7 +23,7 @@ color_t ray_color(const ray_t ray, world_t world, int depth) {
 
   if (rec.count > 0) {
     vec3_t target = add(add(rec.p, rec.normal),
-                        random_in_unit_sphere());
+                        random_on_unit_sphere());
     ray_t ray_new;
     ray_new.origin = rec.p;
     ray_new.direction = sub(target, rec.p);
