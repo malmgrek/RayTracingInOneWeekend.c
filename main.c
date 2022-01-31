@@ -34,22 +34,22 @@ void init_world(world_t *world, sphere_t *spheres) {
 
   // Sphere center points
   vec3_t center;
-  double xs[4] = { 0.0, 0.0, -1.0, 1.0 };
-  double ys[4] = { -100.5, 0.0, 0.0, 0.0 };
-  double zs[4] = { -1.0, -1.0, -1.0, -1.0 };
-  double radii[4] = { 100.0, 0.5, 0.5, 0.5 };
+  double xs[5] =    { 0.0,    0.0, -1.0, -1.0,  1.0 };
+  double ys[5] =    { -100.5, 0.0,  0.0,  0.0,  0.0 };
+  double zs[5] =    { -1.0,  -1.0, -1.0, -1.0, -1.0 };
+  double radii[5] = { 100.0,  0.5,  0.5,  -0.4,  0.5 };
 
   // Sphere materials
   material_t material;
   vec3_t albedo;
-  double rs[4] = { 0.8, 0.1, 1.0, 0.8 };
-  double gs[4] = { 0.8, 0.2, 1.0, 0.6 };
-  double bs[4] = { 0.0, 0.5, 1.0, 0.2 };
-  double fuzzes[4] = { 0.0, 0.0, 0.0, 0.0 };
-  double irs[4] = { 0.0, 0.0, 1.5, 0.0 };
-  int classes[4] = { 1, 1, 3, 2 };
+  double rs[5] = { 0.8, 0.1, 1.0, 1.0, 0.8 };
+  double gs[5] = { 0.8, 0.2, 1.0, 1.0, 0.6 };
+  double bs[5] = { 0.0, 0.5, 1.0, 1.0, 0.2 };
+  double fuzzes[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+  double irs[5] = { 0.0, 0.0, 1.5, 1.5, 0.0 };
+  int classes[5] = { 1, 1, 3, 3, 2 };
 
-  for (int i = 0; i < 4; ++i) {
+  for (int i = 0; i < 5; ++i) {
 
     center.x = xs[i];
     center.y = ys[i];
@@ -94,7 +94,7 @@ int main() {
   // loop them explicitly.
 
   world_t world;
-  world.num_spheres = 4;
+  world.num_spheres = 5;
   sphere_t spheres[world.num_spheres];
   init_world(&world, spheres);
 

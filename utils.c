@@ -29,4 +29,10 @@ double clamp(double x, double min, double max) {
   return x;
 }
 
+double reflectance(double cosine, double ref_idx) {
+  double r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+  r0 *= r0;
+  return r0 + (1.0 - r0) * pow((1.0 - cosine), 5);
+}
+
 const double PI = 3.1415926535897932385;

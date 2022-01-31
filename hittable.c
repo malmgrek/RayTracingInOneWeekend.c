@@ -75,7 +75,8 @@ bool scatter_dielectric(ray_t ray_in,
   double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
   bool cannot_refract = refraction_ratio * sin_theta > 1.0;
   vec3_t direction;
-  if (cannot_refract) {
+  if (cannot_refract ||
+      reflectance(cos_theta, refraction_ratio) > random_double_unit()) {
     direction = reflect(unit_direction, rec.normal);
   } else {
     direction = refract(unit_direction, rec.normal, refraction_ratio);
