@@ -70,9 +70,19 @@ bool scatter_dielectric(ray_t ray_in,
   double ir = rec.material.index_of_refraction;
   double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
   vec3_t unit_direction = unit_vector(ray_in.direction);
-  vec3_t refracted = refract(unit_direction, rec.normal, refraction_ratio);
+
+  double cos_theta = fmin(dot(mul(-1.0, unit_direction), rec.normal), 1.0);
+  double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+  bool cannot_refract = refraction_ratio * sin_theta > 1.0;
+  vec3_t direction;
+  if (cannot_refract) {
+    direction = reflect(unit_direction, rec.normal);
+  } else {
+    direction = refract(unit_direction, rec.normal, refraction_ratio);
+  }
+
   scattered->origin = rec.p;
-  scattered->direction = refracted;
+  scattered->direction = direction;
   return true;
 }
 
