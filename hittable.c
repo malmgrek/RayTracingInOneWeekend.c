@@ -28,10 +28,10 @@ bool sphere_hit(hit_record_t *rec,
 
   rec->t = root;
   rec->p = ray_at(ray, root);
-  rec->normal = mul(1 / sphere.radius,
+  rec->normal = mul(1.0 / sphere.radius,
                     sub(rec->p, sphere.center));
 
-  vec3_t outward_normal = mul(1 / sphere.radius,
+  vec3_t outward_normal = mul(1.0 / sphere.radius,
                               sub(rec->p, sphere.center));
   rec->front_face = dot(ray.direction, outward_normal) < 0.0;
   rec->normal = rec->front_face ?

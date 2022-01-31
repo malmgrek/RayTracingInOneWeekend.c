@@ -26,7 +26,7 @@ camera_t create_default_camera() {
   cam.vertical = vertical;
   // origin - horizontal/2 - vertical/2 - focal
   vec3_t lower_left_corner = sub(sub(cam.origin, mul(0.5, cam.horizontal)),
-                               add(mul(0.5, cam.vertical), focal));
+                                 add(mul(0.5, cam.vertical), focal));
   cam.lower_left_corner = lower_left_corner;
   return cam;
 }
