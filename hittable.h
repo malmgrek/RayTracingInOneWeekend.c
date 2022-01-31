@@ -6,10 +6,12 @@
 #include "utils.h"
 
 typedef struct {
+  double index_of_refraction;
   double fuzz;
   color_t albedo;
   // 1: Lambertian
   // 2: Metal
+  // 3: Dielectric
   int class;
 } material_t;
 
@@ -41,13 +43,21 @@ bool sphere_hit(hit_record_t *red,
 
 hit_record_t hit(const ray_t ray, world_t world);
 
+// TODO: Add consts in whatever arguments suitable
+bool scatter_dielectric(ray_t ray_in,
+                        hit_record_t rec,
+                        color_t *attenuation,
+                        ray_t *scattered);
+
 bool scatter_lambertian(hit_record_t rec,
                         color_t *attenuation,
                         ray_t *scattered);
+
 bool scatter_metal(ray_t ray_in,
                    hit_record_t rec,
                    color_t *attenuation,
                    ray_t *scattered);
+
 bool scatter(ray_t ray_in,
              hit_record_t rec,
              color_t *attenuation,

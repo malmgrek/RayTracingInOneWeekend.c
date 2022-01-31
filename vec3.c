@@ -76,3 +76,12 @@ vec3_t reflect(vec3_t u, vec3_t n) {
   vec3_t v = sub(u, mul(2.0 * dot(u, n), n));
   return v;
 }
+
+vec3_t refract(vec3_t uv, vec3_t n, double etai_over_etat) {
+  double cos_theta = fmin(dot(mul(-1.0, uv), n), 1.0);
+  vec3_t r_out_perp = mul(etai_over_etat,
+                          add(uv, mul(cos_theta, n)));
+  vec3_t r_out_parallel = mul(-sqrt(fabs(1.0 - norm_squared(r_out_perp))),
+                              n);
+  return add(r_out_perp, r_out_parallel);
+}

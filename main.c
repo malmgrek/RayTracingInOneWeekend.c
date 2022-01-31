@@ -45,8 +45,9 @@ void init_world(world_t *world, sphere_t *spheres) {
   double rs[4] = { 0.8, 0.7, 0.8, 0.8 };
   double gs[4] = { 0.8, 0.3, 0.8, 0.6 };
   double bs[4] = { 0.0, 0.3, 0.8, 0.2 };
-  double fuzzes[4] = { 0.0, 0.0, 0.3, 1.0 };
-  int classes[4] = { 1, 1, 2, 2 };
+  double fuzzes[4] = { 0.0, 0.0, 0.0, 1.0 };
+  double irs[4] = { 0.0, 1.5, 1.5, 0.0 };
+  int classes[4] = { 1, 3, 3, 2 };
 
   for (int i = 0; i < 4; ++i) {
 
@@ -60,6 +61,7 @@ void init_world(world_t *world, sphere_t *spheres) {
     material.albedo = albedo;
     material.class = classes[i];
     material.fuzz = fuzzes[i];
+    material.index_of_refraction = irs[i];
 
     spheres[i].center = center;
     spheres[i].radius = radii[i];

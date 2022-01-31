@@ -60,6 +60,22 @@ hit_record_t hit(const ray_t ray, world_t world) {
   return rec;
 }
 
+bool scatter_dielectric(ray_t ray_in,
+                        hit_record_t rec,
+                        color_t *attenuation,
+                        ray_t *scattered) {
+  attenuation->x = 1.0;
+  attenuation->y = 1.0;
+  attenuation->z = 1.0;
+  double ir = rec.material.index_of_refraction;
+  double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
+  vec3_t unit_direction = unit_vector(ray_in.direction);
+  vec3_t refracted = refract(unit_direction, rec.normal, refraction_ratio);
+  scattered->origin = rec.p;
+  scattered->direction = refracted;
+  return true;
+}
+
 bool scatter_lambertian(hit_record_t rec,
                         color_t *attenuation,
                         ray_t *scattered) {
@@ -99,6 +115,9 @@ bool scatter(ray_t ray_in,
   }
   if (rec.material.class == 2) {
     return scatter_metal(ray_in, rec, attenuation, scattered);
+  }
+  if (rec.material.class == 3) {
+    return scatter_dielectric(ray_in, rec, attenuation, scattered);
   }
   return false;
 }
