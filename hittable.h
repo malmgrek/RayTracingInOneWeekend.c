@@ -35,6 +35,8 @@ typedef struct {
   material_t material;
 } hit_record_t;
 
+// -------------- Type instance constructors -------
+
 hit_record_t HitRecord(vec3_t p,
                        vec3_t normal,
                        double t,
@@ -48,14 +50,18 @@ sphere_t Sphere(vec3_t center, double radius, material_t material);
 
 world_t World(sphere_t *spheres, int num_spheres);
 
+// ------------- Hit checking ----------------------
+
 bool sphere_hit(hit_record_t *red,
                 sphere_t sphere,
-                const ray_t ray,
+                ray_t ray,
                 double t_min,
                 double t_max);
 
 
-hit_record_t hit(const ray_t ray, world_t world);
+hit_record_t hit(ray_t ray, world_t world);
+
+// ------------- Scattering ------------------------
 
 bool scatter_dielectric(ray_t ray_in,
                         hit_record_t rec,
@@ -76,6 +82,6 @@ bool scatter(ray_t ray_in,
              color_t *attenuation,
              ray_t *scattered);
 
-// NOTE: Define other shapes by defining type & hit-function pairs
+void destroy_world(world_t *world);
 
 #endif // HITTABLE_H_

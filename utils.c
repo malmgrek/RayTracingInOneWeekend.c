@@ -1,7 +1,8 @@
 #include "utils.h"
 #include "vec3.h"
 
-void progress_bar(char *bar, double rate) {
+void progress_bar(double rate) {
+  char bar[12];
   bar[0] = '[';
   bar[11] = ']';
   for (int i = 1; i <= 10; i++) {
@@ -23,7 +24,7 @@ double random_double(double min, double max) {
   return min + (max - min) * random_double_unit();
 }
 
-double clamp(double x, double min, double max) {
+double clip(double x, double min, double max) {
   if (x < min) return min;
   if (x > max) return max;
   return x;

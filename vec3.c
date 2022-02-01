@@ -1,6 +1,11 @@
 #include "vec3.h"
 
-vec3_t Vec(double x, double y, double z) {
+vec3_t Vector(double x, double y, double z) {
+  vec3_t u = { x, y, z };
+  return u;
+}
+
+vec3_t Point(double x, double y, double z) {
   vec3_t u = { x, y, z };
   return u;
 }

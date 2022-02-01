@@ -1,9 +1,6 @@
 #include "hittable.h"
 
-material_t Material(double ir,
-                    double fuzz,
-                    vec3_t albedo,
-                    int class) {
+material_t Material(double ir, double fuzz, vec3_t albedo, int class) {
   material_t mat;
   mat.index_of_refraction = ir;
   mat.fuzz = fuzz;
@@ -22,7 +19,7 @@ sphere_t Sphere(vec3_t center, double radius, material_t material) {
 
 bool sphere_hit(hit_record_t *rec,
                 sphere_t sphere,
-                const ray_t ray,
+                ray_t ray,
                 double t_min,
                 double t_max) {
 
@@ -65,7 +62,7 @@ bool sphere_hit(hit_record_t *rec,
 
 }
 
-hit_record_t hit(const ray_t ray, world_t world) {
+hit_record_t hit(ray_t ray, world_t world) {
   // TODO / FIXME: Ugly mutative function, could we improve sphere_hit?
   hit_record_t *acc = calloc(1, sizeof(hit_record_t));
   acc->t = 1.0e12;  // = INFINITY
@@ -151,4 +148,9 @@ bool scatter(ray_t ray_in,
     return scatter_dielectric(ray_in, rec, attenuation, scattered);
   }
   return false;
+}
+
+void destroy_world(world_t *world) {
+  free(world->spheres);
+  free(world);
 }
