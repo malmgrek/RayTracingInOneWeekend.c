@@ -80,13 +80,14 @@ int main() {
 
   /* Image */
   const double aspect_ratio = 16.0 / 9.0;
+  const double vertical_field_of_view = 90.0;
   const int image_width = 400;
   const int image_height = (int) image_width / aspect_ratio;
   const int samples_per_pixel = 100;
   const int max_depth = 50;
 
   /* Camera */
-  camera_t cam = create_default_camera();
+  camera_t cam = create_camera(vertical_field_of_view, aspect_ratio);
 
   // NOTE: In C++ one can use shared pointers to wrap a list of hittable objects
   // (possible different ones) to a list that is looped over in the main loop.

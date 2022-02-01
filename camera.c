@@ -1,32 +1,32 @@
 #include "camera.h"
 
-ray_t get_ray(camera_t camera, double u, double v) {
+ray_t get_ray(camera_t cam, double u, double v) {
   ray_t ray;
-  ray.origin = camera.origin;
+  ray.origin = cam.origin;
   // direction = lower_left_corner + u * horizontal + v * vertical - origin
-  ray.direction = add(add(camera.lower_left_corner,
-                          mul(u, camera.horizontal)),
-                      sub(mul(v, camera.vertical),
-                          camera.origin));
+  ray.direction = add(add(cam.lower_left_corner,
+                          mul(u, cam.horizontal)),
+                      sub(mul(v, cam.vertical),
+                          cam.origin));
   return ray;
 }
 
-camera_t create_default_camera() {
-  camera_t cam;
-  cam.aspect_ratio = 16.0 / 9.0;
-  cam.viewport_height = 2.0;
-  cam.viewport_width = cam.aspect_ratio * cam.viewport_height;
-  cam.focal_length = 1.0;
-  vec3_t focal = { 0.0, 0.0, cam.focal_length };
+// Vfof: vertical field-of-view
+camera_t create_camera(double vfov, double aspect_ratio) {
+  double theta = degrees_to_radians(vfov);
+  double h = tan(theta / 2.0);
+  double viewport_height = 2.0 * h;
+  double viewport_width = aspect_ratio * viewport_height;
+  vec3_t focal = { 0.0, 0.0, 1.0 };
   vec3_t origin = { 0.0, 0.0, 0.0 };
-  cam.origin = origin;
-  vec3_t horizontal = { cam.viewport_width, 0.0, 0.0 };
-  cam.horizontal = horizontal;
-  vec3_t vertical = { 0.0, cam.viewport_height, 0.0 };
-  cam.vertical = vertical;
-  // origin - horizontal/2 - vertical/2 - focal
-  vec3_t lower_left_corner = sub(sub(cam.origin, mul(0.5, cam.horizontal)),
-                                 add(mul(0.5, cam.vertical), focal));
+  vec3_t horizontal = { viewport_width, 0.0, 0.0 };
+  vec3_t vertical = { 0.0, viewport_height, 0.0 };
+  vec3_t lower_left_corner = sub(sub(origin, mul(0.5, horizontal)),
+                                 add(mul(0.5, vertical), focal));
+  camera_t cam;
   cam.lower_left_corner = lower_left_corner;
+  cam.horizontal = horizontal;
+  cam.vertical = vertical;
+  cam.origin = origin;
   return cam;
 }
