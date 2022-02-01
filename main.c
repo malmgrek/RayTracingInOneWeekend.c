@@ -30,26 +30,31 @@ color_t ray_color(const ray_t ray, world_t world, int depth) {
 
 }
 
-void init_world(world_t *world, sphere_t *spheres) {
+world_t *create_world() {
+
+  world_t *world = malloc(sizeof(world_t) + 5 * sizeof(sphere_t));
+  sphere_t *spheres = malloc(5 * sizeof(sphere_t));
+
+  double R = cos(PI / 4);
 
   // Sphere center points
   vec3_t center;
-  double xs[5] =    { 0.0,    0.0, -1.0, -1.0,  1.0 };
-  double ys[5] =    { -100.5, 0.0,  0.0,  0.0,  0.0 };
-  double zs[5] =    { -1.0,  -1.0, -1.0, -1.0, -1.0 };
-  double radii[5] = { 100.0,  0.5,  0.5,  -0.4,  0.5 };
+  double xs[2] =    { -R,  R };
+  double ys[2] =    { 0.0, 0.0 };
+  double zs[2] =    { -1.0, -1.0, };
+  double radii[2] = { R, R };
 
   // Sphere materials
   material_t material;
   vec3_t albedo;
-  double rs[5] = { 0.8, 0.1, 1.0, 1.0, 0.8 };
-  double gs[5] = { 0.8, 0.2, 1.0, 1.0, 0.6 };
-  double bs[5] = { 0.0, 0.5, 1.0, 1.0, 0.2 };
-  double fuzzes[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
-  double irs[5] = { 0.0, 0.0, 1.5, 1.5, 0.0 };
-  int classes[5] = { 1, 1, 3, 3, 2 };
+  double rs[2] = { 0.0, 1.0 };
+  double gs[2] = { 0.0, 0.0 };
+  double bs[2] = { 1.0, 0.0 };
+  double fuzzes[2] = { 0.0, 0.0 };
+  double irs[2] = { 0.0, 0.0 };
+  int classes[2] = { 1, 1 };
 
-  for (int i = 0; i < 5; ++i) {
+  for (int i = 0; i < 2; ++i) {
 
     center.x = xs[i];
     center.y = ys[i];
@@ -70,7 +75,15 @@ void init_world(world_t *world, sphere_t *spheres) {
   }
 
   world->spheres = spheres;
+  world->num_spheres = 2;
 
+  return world;
+
+}
+
+void destroy_world(world_t *world) {
+  free(world->spheres);
+  free(world);
 }
 
 int main() {
@@ -94,10 +107,7 @@ int main() {
   // In C, we can't do so. Instead, we create a list of structs beforehand, and
   // loop them explicitly.
 
-  world_t world;
-  world.num_spheres = 5;
-  sphere_t spheres[world.num_spheres];
-  init_world(&world, spheres);
+  world_t *world = create_world();
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -113,11 +123,13 @@ int main() {
         double u = (i + random_double_unit()) / (image_width - 1);
         double v = (j + random_double_unit()) / (image_height - 1);
         ray_t ray = get_ray(cam, u, v);
-        pixel_color = add(pixel_color, ray_color(ray, world, max_depth));
+        pixel_color = add(pixel_color, ray_color(ray, *world, max_depth));
       }
       write_color(pixel_color, samples_per_pixel);
 
     }
   }
+
+  destroy_world(world);
 
 }
