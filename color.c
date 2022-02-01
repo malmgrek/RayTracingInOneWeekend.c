@@ -4,6 +4,11 @@ const color_t black = { 0.0, 0.0, 0.0 };
 const color_t white = { 1.0, 1.0, 1.0 };
 const color_t lightblue = { 0.5, 0.7, 1.0 };
 
+color_t Color(double red, double green, double blue) {
+  color_t color = { red, green, blue };
+  return color;
+}
+
 void write_color(color_t pixel_color, int samples_per_pixel) {
   double r = pixel_color.x;
   double g = pixel_color.y;

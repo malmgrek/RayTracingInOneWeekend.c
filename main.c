@@ -6,6 +6,12 @@
 #include "vec3.h"
 
 // TODO: Simplify vec3_t to 3-array of doubles
+// TODO: Constructors to Color, perhaps Point
+// TODO: Add consts in whatever arguments suitable
+// TODO: Refactor to reasonable modules
+// TODO: Makefile
+// TODO: Readme
+// TODO: GitHub
 
 color_t ray_color(const ray_t ray, world_t world, int depth) {
 
@@ -83,7 +89,7 @@ world_t *create_simple_scene() {
 
 world_t *create_random_scene() {
 
-  int n_spheres = 36 + 3;
+  int n_spheres = 484 + 3;
   world_t *world = malloc(sizeof(world_t) +
                           (n_spheres+1) * sizeof(sphere_t));
   sphere_t *spheres = malloc((n_spheres+1) * sizeof(sphere_t));
@@ -100,15 +106,15 @@ world_t *create_random_scene() {
   sphere_t ground = Sphere(c, 1000.0, ground_material);
 
   spheres[0] = ground;
-  spheres[1] = Sphere(Vec(0.0, 1.0, 0.0),
+  spheres[1] = Sphere(Vector(0.0, 1.0, 0.0),
                       1.0,
-                      Material(1.5, 0.0, Vec(0.0, 0.0, 0.0), 3));
-  spheres[2] = Sphere(Vec(-4.0, 1.0, 0.0),
+                      Material(1.5, 0.0, Vector(0.0, 0.0, 0.0), 3));
+  spheres[2] = Sphere(Vector(-4.0, 1.0, 0.0),
                       1.0,
-                      Material(0.0, 0.0, Vec(0.4, 0.2, 0.1), 1));
-  spheres[3] = Sphere(Vec(4.0, 1.0, 0.0),
+                      Material(0.0, 0.0, Vector(0.4, 0.2, 0.1), 1));
+  spheres[3] = Sphere(Vector(4.0, 1.0, 0.0),
                       1.0,
-                      Material(1.5, 0.0, Vec(0.7, 0.6, 0.5), 2));
+                      Material(1.5, 0.0, Vector(0.7, 0.6, 0.5), 2));
 
   int n = 4;
   int c_max = sqrt(n_spheres - 3) / 2;
@@ -161,10 +167,10 @@ int main() {
   char bar[13];
 
   /* Image */
-  const double aspect_ratio = 16.0 / 9.0;
-  const int image_width = 400;
+  const double aspect_ratio = 3.0 / 2.0;
+  const int image_width = 1200;
   const int image_height = (int) (image_width / aspect_ratio);
-  const int samples_per_pixel = 100;
+  const int samples_per_pixel = 500;
   const int max_depth = 50;
 
   /* Camera */

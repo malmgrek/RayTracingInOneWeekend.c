@@ -35,19 +35,28 @@ typedef struct {
   material_t material;
 } hit_record_t;
 
+hit_record_t HitRecord(vec3_t p,
+                       vec3_t normal,
+                       double t,
+                       bool front_face,
+                       int count,
+                       material_t material);
+
+material_t Material(double ir, double fuzz, vec3_t albedo, int class);
+
+sphere_t Sphere(vec3_t center, double radius, material_t material);
+
+world_t World(sphere_t *spheres, int num_spheres);
+
 bool sphere_hit(hit_record_t *red,
                 sphere_t sphere,
                 const ray_t ray,
                 double t_min,
                 double t_max);
 
-material_t Material(double ir, double fuzz, vec3_t albedo, int class);
-
-sphere_t Sphere(vec3_t center, double radius, material_t material);
 
 hit_record_t hit(const ray_t ray, world_t world);
 
-// TODO: Add consts in whatever arguments suitable
 bool scatter_dielectric(ray_t ray_in,
                         hit_record_t rec,
                         color_t *attenuation,
