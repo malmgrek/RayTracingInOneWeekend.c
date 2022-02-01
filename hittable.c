@@ -1,5 +1,25 @@
 #include "hittable.h"
 
+material_t Material(double ir,
+                    double fuzz,
+                    vec3_t albedo,
+                    int class) {
+  material_t mat;
+  mat.index_of_refraction = ir;
+  mat.fuzz = fuzz;
+  mat.albedo = albedo;
+  mat.class = class;
+  return mat;
+}
+
+sphere_t Sphere(vec3_t center, double radius, material_t material) {
+  sphere_t sp;
+  sp.center = center;
+  sp.radius = radius;
+  sp.material = material;
+  return sp;
+}
+
 bool sphere_hit(hit_record_t *rec,
                 sphere_t sphere,
                 const ray_t ray,

@@ -14,6 +14,8 @@ typedef struct {
 
 typedef vec3_t Point3;
 
+vec3_t Vec(double x, double y, double z);
+
 // Basic linear space operations
 double dot(vec3_t u, vec3_t v);
 double norm(vec3_t u);

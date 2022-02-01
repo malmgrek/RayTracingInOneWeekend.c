@@ -15,13 +15,13 @@ typedef struct {
   double lens_radius;
 } camera_t;
 
-camera_t create_camera(vec3_t lookfrom,
-                       vec3_t lookat,
-                       vec3_t vup,
-                       double vfov,
-                       double aspect_ratio,
-                       double aperture,
-                       double focus_dist);
+camera_t Camera(vec3_t lookfrom,
+                vec3_t lookat,
+                vec3_t vup,
+                double vfov,
+                double aspect_ratio,
+                double aperture,
+                double focus_dist);
 
 ray_t get_ray(camera_t cam, double s, double t);
 

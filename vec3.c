@@ -1,5 +1,10 @@
 #include "vec3.h"
 
+vec3_t Vec(double x, double y, double z) {
+  vec3_t u = { x, y, z };
+  return u;
+}
+
 double dot(vec3_t u, vec3_t v) {
   double t = u.x * v.x + u.y * v.y + u.z * v.z;
   return t;

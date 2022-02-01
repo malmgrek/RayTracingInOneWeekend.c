@@ -41,6 +41,10 @@ bool sphere_hit(hit_record_t *red,
                 double t_min,
                 double t_max);
 
+material_t Material(double ir, double fuzz, vec3_t albedo, int class);
+
+sphere_t Sphere(vec3_t center, double radius, material_t material);
+
 hit_record_t hit(const ray_t ray, world_t world);
 
 // TODO: Add consts in whatever arguments suitable

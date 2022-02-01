@@ -1,13 +1,13 @@
 #include "camera.h"
 
 // Vfof: vertical field-of-view
-camera_t create_camera(vec3_t lookfrom,
-                       vec3_t lookat,
-                       vec3_t vup,
-                       double vfov,
-                       double aspect_ratio,
-                       double aperture,
-                       double focus_dist) {
+camera_t Camera(vec3_t lookfrom,
+                vec3_t lookat,
+                vec3_t vup,
+                double vfov,
+                double aspect_ratio,
+                double aperture,
+                double focus_dist) {
   double theta = degrees_to_radians(vfov);
   double h = tan(theta / 2.0);
   double viewport_height = 2.0 * h;
