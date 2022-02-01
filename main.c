@@ -99,11 +99,19 @@ int main() {
   const int max_depth = 50;
 
   /* Camera */
-  vec3_t lookfrom = { -2.0, 2.0, 1.0 };
-  vec3_t lookat = { 0.0, 0.0, -1.0 };
-  vec3_t vup = { 0.0, 1.0, 0.0 };
-  const double vfov = 20.0;
-  camera_t cam = create_camera(lookfrom, lookat, vup, vfov, aspect_ratio);
+  const vec3_t lookfrom = { 13.0, 2.0, 3.0 };
+  const vec3_t lookat = { 0.0, 0.0, 0.0 };
+  const vec3_t vup = { 0.0, 1.0, 0.0 };
+  const double vfov = 10.0;
+  const double aperture = 0.1;
+  double dist_to_focus = norm(sub(lookfrom, lookat));
+  camera_t cam = create_camera(lookfrom,
+                               lookat,
+                               vup,
+                               vfov,
+                               aspect_ratio,
+                               aperture,
+                               dist_to_focus);
 
   // NOTE: In C++ one can use shared pointers to wrap a list of hittable objects
   // (possible different ones) to a list that is looped over in the main loop.
@@ -122,10 +130,10 @@ int main() {
       /* ------------------------------------------------------------------------- */
 
       color_t pixel_color = { 0.0, 0.0, 0.0 };
-      for (int s = 0; s < samples_per_pixel; ++s) {
-        double u = (i + random_double_unit()) / (image_width - 1);
-        double v = (j + random_double_unit()) / (image_height - 1);
-        ray_t ray = get_ray(cam, u, v);
+      for (int q = 0; q < samples_per_pixel; ++q) {
+        double s = (i + random_double_unit()) / (image_width - 1);
+        double t = (j + random_double_unit()) / (image_height - 1);
+        ray_t ray = get_ray(cam, s, t);
         pixel_color = add(pixel_color, ray_color(ray, *world, max_depth));
       }
       write_color(pixel_color, samples_per_pixel);

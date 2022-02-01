@@ -9,14 +9,20 @@ typedef struct {
   vec3_t horizontal;
   vec3_t vertical;
   vec3_t lower_left_corner;
+  vec3_t u;
+  vec3_t v;
+  vec3_t w;
+  double lens_radius;
 } camera_t;
 
 camera_t create_camera(vec3_t lookfrom,
                        vec3_t lookat,
                        vec3_t vup,
                        double vfov,
-                       double aspect_ratio);
+                       double aspect_ratio,
+                       double aperture,
+                       double focus_dist);
 
-ray_t get_ray(camera_t cam, double u, double v);
+ray_t get_ray(camera_t cam, double s, double t);
 
 #endif // CAMERA_H_

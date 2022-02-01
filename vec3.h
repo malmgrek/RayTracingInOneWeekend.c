@@ -28,6 +28,7 @@ vec3_t sub(vec3_t u, vec3_t v);
 
 // Utility functions
 bool near_zero(vec3_t u);
+vec3_t random_in_unit_disk();
 vec3_t random_in_unit_sphere();
 vec3_t random_on_unit_sphere();
 vec3_t random_vector(double min, double max);
