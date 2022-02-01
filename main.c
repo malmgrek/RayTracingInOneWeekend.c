@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "vec3.h"
 
+// TODO: Simplify vec3_t to 3-array of doubles
+
 color_t ray_color(const ray_t ray, world_t world, int depth) {
 
   // If we've exceeded the ray bounce limit, no more light is gathered.
@@ -35,26 +37,24 @@ world_t *create_world() {
   world_t *world = malloc(sizeof(world_t) + 5 * sizeof(sphere_t));
   sphere_t *spheres = malloc(5 * sizeof(sphere_t));
 
-  double R = cos(PI / 4);
-
   // Sphere center points
   vec3_t center;
-  double xs[2] =    { -R,  R };
-  double ys[2] =    { 0.0, 0.0 };
-  double zs[2] =    { -1.0, -1.0, };
-  double radii[2] = { R, R };
+  double xs[5] =    { 0.0,    0.0, -1.0, -1.0,  1.0 };
+  double ys[5] =    { -100.5, 0.0,  0.0,  0.0,  0.0 };
+  double zs[5] =    { -1.0,  -1.0, -1.0, -1.0, -1.0 };
+  double radii[5] = { 100.0,  0.5,  0.5,  -0.4,  0.5 };
 
   // Sphere materials
   material_t material;
   vec3_t albedo;
-  double rs[2] = { 0.0, 1.0 };
-  double gs[2] = { 0.0, 0.0 };
-  double bs[2] = { 1.0, 0.0 };
-  double fuzzes[2] = { 0.0, 0.0 };
-  double irs[2] = { 0.0, 0.0 };
-  int classes[2] = { 1, 1 };
+  double rs[5] = { 0.8, 0.1, 1.0, 1.0, 0.8 };
+  double gs[5] = { 0.8, 0.2, 1.0, 1.0, 0.6 };
+  double bs[5] = { 0.0, 0.5, 1.0, 1.0, 0.2 };
+  double fuzzes[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+  double irs[5] = { 0.0, 0.0, 1.5, 1.5, 0.0 };
+  int classes[5] = { 1, 1, 3, 3, 2 };
 
-  for (int i = 0; i < 2; ++i) {
+  for (int i = 0; i < 5; ++i) {
 
     center.x = xs[i];
     center.y = ys[i];
@@ -75,7 +75,7 @@ world_t *create_world() {
   }
 
   world->spheres = spheres;
-  world->num_spheres = 2;
+  world->num_spheres = 5;
 
   return world;
 
@@ -93,14 +93,17 @@ int main() {
 
   /* Image */
   const double aspect_ratio = 16.0 / 9.0;
-  const double vertical_field_of_view = 90.0;
   const int image_width = 400;
   const int image_height = (int) image_width / aspect_ratio;
   const int samples_per_pixel = 100;
   const int max_depth = 50;
 
   /* Camera */
-  camera_t cam = create_camera(vertical_field_of_view, aspect_ratio);
+  vec3_t lookfrom = { -2.0, 2.0, 1.0 };
+  vec3_t lookat = { 0.0, 0.0, -1.0 };
+  vec3_t vup = { 0.0, 1.0, 0.0 };
+  const double vfov = 20.0;
+  camera_t cam = create_camera(lookfrom, lookat, vup, vfov, aspect_ratio);
 
   // NOTE: In C++ one can use shared pointers to wrap a list of hittable objects
   // (possible different ones) to a list that is looped over in the main loop.

@@ -14,6 +14,13 @@ double norm(vec3_t u) {
   return t;
 }
 
+vec3_t cross(vec3_t u, vec3_t v) {
+  vec3_t w = { u.y * v.z - u.z * v.y,
+               u.z * v.x - u.x * v.z,
+               u.x * v.y - u.y * v.x };
+  return w;
+}
+
 vec3_t mul(double t, vec3_t u) {
   vec3_t v = { t * u.x, t * u.y, t * u.z };
   return v;
