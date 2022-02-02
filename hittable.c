@@ -28,9 +28,19 @@ bool sphere_hit(hit_record_t *rec,
   oc.y = ray->origin.y - sphere->center.y;
   oc.z = ray->origin.z - sphere->center.z;
 
-  double a = norm_squared(ray->direction);
-  double half_b = dot(oc, ray->direction);
-  double c = norm_squared(oc) - sphere->radius * sphere->radius;
+  double a =
+    ray->direction.x * ray->direction.x +
+    ray->direction.y * ray->direction.y +
+    ray->direction.z * ray->direction.z;
+
+  double half_b =
+    oc.x * ray->direction.x +
+    oc.y * ray->direction.y +
+    oc.z * ray->direction.z;
+
+  double c =
+    oc.x*oc.x + oc.y*oc.y + oc.z*oc.z -
+    sphere->radius*sphere->radius;
 
   double discr = half_b * half_b - a * c;
   if (discr < 0) {
@@ -49,14 +59,23 @@ bool sphere_hit(hit_record_t *rec,
 
   rec->t = root;
   rec->p = ray_at(ray, root);
-  rec->normal = mul(1.0 / sphere->radius,
-                    sub(rec->p, sphere->center));
+  rec->normal.x = (rec->p.x - sphere->center.x) / sphere->radius;
+  rec->normal.y = (rec->p.y - sphere->center.y) / sphere->radius;
+  rec->normal.z = (rec->p.z - sphere->center.z) / sphere->radius;
 
-  vec3_t outward_normal = mul(1.0 / sphere->radius,
-                              sub(rec->p, sphere->center));
-  rec->front_face = dot(ray->direction, outward_normal) < 0.0;
-  rec->normal = rec->front_face ?
-    outward_normal : mul(-1.0, outward_normal);
+  /* vec3_t outward_normal = mul(1.0 / sphere->radius, */
+  /*                             sub(rec->p, sphere->center)); */
+
+  rec->front_face = (ray->direction.x * rec->normal.x +
+                     ray->direction.y * rec->normal.y +
+                     ray->direction.z * rec->normal.z) < 0.0;
+
+  if (!rec->front_face) {
+    rec->normal.x *= -1.0;
+    rec->normal.y *= -1.0;
+    rec->normal.z *= -1.0;
+  }
+
   rec->material = sphere->material;
 
   // Count as hit if all ok
