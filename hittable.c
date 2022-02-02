@@ -23,7 +23,11 @@ bool sphere_hit(hit_record_t *rec,
                 double t_min,
                 double t_max) {
 
-  vec3_t oc = sub(ray->origin, sphere->center);
+  vec3_t oc;
+  oc.x = ray->origin.x - sphere->center.x;
+  oc.y = ray->origin.y - sphere->center.y;
+  oc.z = ray->origin.z - sphere->center.z;
+
   double a = norm_squared(ray->direction);
   double half_b = dot(oc, ray->direction);
   double c = norm_squared(oc) - sphere->radius * sphere->radius;
