@@ -53,7 +53,7 @@ world_t World(sphere_t *spheres, int num_spheres);
 // ------------- Hit checking ----------------------
 
 bool sphere_hit(hit_record_t *red,
-                sphere_t sphere,
+                sphere_t *sphere,
                 ray_t *ray,
                 double t_min,
                 double t_max);

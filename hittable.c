@@ -18,15 +18,15 @@ sphere_t Sphere(vec3_t center, double radius, material_t material) {
 }
 
 bool sphere_hit(hit_record_t *rec,
-                sphere_t sphere,
+                sphere_t *sphere,
                 ray_t *ray,
                 double t_min,
                 double t_max) {
 
-  vec3_t oc = sub(ray->origin, sphere.center);
+  vec3_t oc = sub(ray->origin, sphere->center);
   double a = norm_squared(ray->direction);
   double half_b = dot(oc, ray->direction);
-  double c = norm_squared(oc) - sphere.radius * sphere.radius;
+  double c = norm_squared(oc) - sphere->radius * sphere->radius;
 
   double discr = half_b * half_b - a * c;
   if (discr < 0) {
@@ -45,15 +45,15 @@ bool sphere_hit(hit_record_t *rec,
 
   rec->t = root;
   rec->p = ray_at(ray, root);
-  rec->normal = mul(1.0 / sphere.radius,
-                    sub(rec->p, sphere.center));
+  rec->normal = mul(1.0 / sphere->radius,
+                    sub(rec->p, sphere->center));
 
-  vec3_t outward_normal = mul(1.0 / sphere.radius,
-                              sub(rec->p, sphere.center));
+  vec3_t outward_normal = mul(1.0 / sphere->radius,
+                              sub(rec->p, sphere->center));
   rec->front_face = dot(ray->direction, outward_normal) < 0.0;
   rec->normal = rec->front_face ?
     outward_normal : mul(-1.0, outward_normal);
-  rec->material = sphere.material;
+  rec->material = sphere->material;
 
   // Count as hit if all ok
   rec->count += 1;
@@ -68,7 +68,7 @@ void hit(hit_record_t *rec, ray_t *ray, world_t *world) {
   for (int i = 0; i < world->num_spheres; ++i) {
     // NOTE: Adding non-zero t_min has a huge effect on the image
     // darkness
-    sphere_hit(rec, world->spheres[i], ray, 1.0e-3, rec->t);
+    sphere_hit(rec, &world->spheres[i], ray, 1.0e-3, rec->t);
   }
 }
 
