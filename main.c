@@ -70,6 +70,7 @@ int main() {
   hit_record_t rec;
   ray_t ray;
   color_t pixel_color;
+  color_t added_pixel_color;
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -85,9 +86,12 @@ int main() {
         double s = (i + random_double_unit()) / (image_width - 1);
         double t = (j + random_double_unit()) / (image_height - 1);
         ray = get_ray(cam, s, t);
-        pixel_color = add(pixel_color, ray_color(&rec, &ray, *world, max_depth));
+        added_pixel_color = ray_color(&rec, &ray, *world, max_depth);
+        pixel_color.x += added_pixel_color.x;
+        pixel_color.y += added_pixel_color.y;
+        pixel_color.z += added_pixel_color.z;
       }
-      write_color(pixel_color, samples_per_pixel);
+      write_color(&pixel_color, samples_per_pixel);
 
     }
   }
