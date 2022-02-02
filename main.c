@@ -11,7 +11,7 @@
 // TODO: Readme
 // TODO: GitHub
 
-color_t ray_color(hit_record_t *rec, ray_t *ray, world_t world, int depth) {
+color_t ray_color(hit_record_t *rec, ray_t *ray, world_t *world, int depth) {
 
   // If we've exceeded the ray bounce limit, no more light is gathered.
   if (depth <= 0) {
@@ -29,7 +29,7 @@ color_t ray_color(hit_record_t *rec, ray_t *ray, world_t world, int depth) {
     return black;
   }
 
-  vec3_t unit = unit_vector(ray->direction);
+  vec3_t unit = unit_vector(&ray->direction);
   double t = 0.5 * (unit.y + 1.0);
 
   color_t color;
@@ -86,7 +86,7 @@ int main() {
         double s = (i + random_double_unit()) / (image_width - 1);
         double t = (j + random_double_unit()) / (image_height - 1);
         ray = get_ray(cam, s, t);
-        added_pixel_color = ray_color(&rec, &ray, *world, max_depth);
+        added_pixel_color = ray_color(&rec, &ray, world, max_depth);
         pixel_color.x += added_pixel_color.x;
         pixel_color.y += added_pixel_color.y;
         pixel_color.z += added_pixel_color.z;

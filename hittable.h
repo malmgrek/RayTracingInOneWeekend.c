@@ -59,7 +59,7 @@ bool sphere_hit(hit_record_t *red,
                 double t_max);
 
 
-void hit(hit_record_t *rec, ray_t *ray, world_t world);
+void hit(hit_record_t *rec, ray_t *ray, world_t *world);
 
 // ------------- Scattering ------------------------
 

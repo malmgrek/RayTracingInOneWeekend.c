@@ -81,7 +81,7 @@ bool scatter_dielectric(ray_t ray_in,
   attenuation->z = 1.0;
   double ir = rec.material.index_of_refraction;
   double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
-  vec3_t unit_direction = unit_vector(ray_in.direction);
+  vec3_t unit_direction = unit_vector(&ray_in.direction);
 
   double cos_theta = fmin(dot(mul(-1.0, unit_direction), rec.normal), 1.0);
   double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
@@ -119,7 +119,7 @@ bool scatter_metal(ray_t ray_in,
                    hit_record_t rec,
                    color_t *attenuation,
                    ray_t *scattered) {
-  vec3_t reflected = reflect(unit_vector(ray_in.direction), rec.normal);
+  vec3_t reflected = reflect(unit_vector(&ray_in.direction), rec.normal);
   scattered->origin = rec.p;
   scattered->direction = add(reflected,
                              mul(rec.material.fuzz,

@@ -34,7 +34,7 @@ vec3_t random_in_unit_sphere();
 vec3_t random_on_unit_sphere();
 vec3_t random_vector(double min, double max);
 vec3_t random_vector_unit();
-vec3_t unit_vector(vec3_t direction);
+vec3_t unit_vector(vec3_t *direction);
 void print_vector(vec3_t u);
 
 #endif // VEC3_H_
