@@ -40,6 +40,7 @@ camera_t Camera(vec3_t lookfrom,
 }
 
 ray_t get_ray(camera_t cam, double s, double t) {
+  // TODO: Use only required cam attributes
   vec3_t rd = mul(cam.lens_radius, random_in_unit_disk());
   vec3_t offset = add(mul(rd.x, cam.u), mul(rd.y, cam.v));
   ray_t ray;

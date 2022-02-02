@@ -54,12 +54,12 @@ world_t World(sphere_t *spheres, int num_spheres);
 
 bool sphere_hit(hit_record_t *red,
                 sphere_t sphere,
-                ray_t ray,
+                ray_t *ray,
                 double t_min,
                 double t_max);
 
 
-hit_record_t hit(ray_t ray, world_t world);
+void hit(hit_record_t *rec, ray_t *ray, world_t world);
 
 // ------------- Scattering ------------------------
 

@@ -6,13 +6,13 @@ world_t *example_scene() {
   sphere_t *spheres = malloc(5 * sizeof(sphere_t));
 
   spheres[0] = Sphere(Point(0.0, -1000.5, -1.0), 1000.0,
-                      Material(0.0, 0.0, Color(0.8, 0.8, 0.0), 1));
+                      Material(0.0, 0.0, Color(0.8, 0.8, 0.0), 2));
   spheres[1] = Sphere(Point(0.0, 0.0, -1.0), 0.5,
-                      Material(0.0, 0.0, Color(0.1, 0.2, 0.5), 1));
+                      Material(0.0, 0.0, Color(0.1, 0.2, 0.5), 2));
   spheres[2] = Sphere(Point(-1.0, 0.0, -1.0), 0.5,
-                      Material(1.5, 0.0, Color(1.0, 1.0, 1.0), 3));
+                      Material(1.5, 0.0, Color(1.0, 1.0, 1.0), 2));
   spheres[3] = Sphere(Point(-1.0, 0.0, -1.0), -0.4,
-                      Material(1.5, 0.0, Color(1.0, 1.0, 1.0), 3));
+                      Material(1.5, 0.0, Color(1.0, 1.0, 1.0), 2));
   spheres[4] = Sphere(Point(1.0, 0.0, -1.0), 0.5,
                       Material(0.0, 0.0, Color(0.8, 0.6, 0.2), 2));
 
