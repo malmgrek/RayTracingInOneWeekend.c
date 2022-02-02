@@ -72,74 +72,74 @@ void hit(hit_record_t *rec, ray_t *ray, world_t *world) {
   }
 }
 
-bool scatter_dielectric(ray_t ray_in,
-                        hit_record_t rec,
+bool scatter_dielectric(ray_t *ray_in,
+                        hit_record_t *rec,
                         color_t *attenuation,
                         ray_t *scattered) {
   attenuation->x = 1.0;
   attenuation->y = 1.0;
   attenuation->z = 1.0;
-  double ir = rec.material.index_of_refraction;
-  double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
-  vec3_t unit_direction = unit_vector(&ray_in.direction);
+  double ir = rec->material.index_of_refraction;
+  double refraction_ratio = rec->front_face ? (1.0 / ir) : ir;
+  vec3_t unit_direction = unit_vector(&ray_in->direction);
 
-  double cos_theta = fmin(dot(mul(-1.0, unit_direction), rec.normal), 1.0);
+  double cos_theta = fmin(dot(mul(-1.0, unit_direction), rec->normal), 1.0);
   double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
   bool cannot_refract = refraction_ratio * sin_theta > 1.0;
   vec3_t direction;
   if (cannot_refract ||
       reflectance(cos_theta, refraction_ratio) > random_double_unit()) {
-    direction = reflect(unit_direction, rec.normal);
+    direction = reflect(unit_direction, rec->normal);
   } else {
-    direction = refract(unit_direction, rec.normal, refraction_ratio);
+    direction = refract(unit_direction, rec->normal, refraction_ratio);
   }
 
-  scattered->origin = rec.p;
+  scattered->origin = rec->p;
   scattered->direction = direction;
   return true;
 }
 
-bool scatter_lambertian(hit_record_t rec,
+bool scatter_lambertian(hit_record_t *rec,
                         color_t *attenuation,
                         ray_t *scattered) {
-  vec3_t scatter_direction = add(rec.normal, random_on_unit_sphere());
+  vec3_t scatter_direction = add(rec->normal, random_on_unit_sphere());
 
   // Catch degenerate scatter direction
   if (near_zero(scatter_direction)) {
-    scatter_direction = rec.normal;
+    scatter_direction = rec->normal;
   }
 
-  scattered->origin = rec.p;
+  scattered->origin = rec->p;
   scattered->direction = scatter_direction;
-  *attenuation = rec.material.albedo;
+  *attenuation = rec->material.albedo;
   return true;
 }
 
-bool scatter_metal(ray_t ray_in,
-                   hit_record_t rec,
+bool scatter_metal(ray_t *ray_in,
+                   hit_record_t *rec,
                    color_t *attenuation,
                    ray_t *scattered) {
-  vec3_t reflected = reflect(unit_vector(&ray_in.direction), rec.normal);
-  scattered->origin = rec.p;
+  vec3_t reflected = reflect(unit_vector(&ray_in->direction), rec->normal);
+  scattered->origin = rec->p;
   scattered->direction = add(reflected,
-                             mul(rec.material.fuzz,
+                             mul(rec->material.fuzz,
                                  random_in_unit_sphere()));
-  *attenuation = rec.material.albedo;
-  return (dot(reflected, rec.normal) > 0.0);
+  *attenuation = rec->material.albedo;
+  return (dot(reflected, rec->normal) > 0.0);
 }
 
 // Wrapper function for all different scatterings
-bool scatter(ray_t ray_in,
-             hit_record_t rec,
+bool scatter(ray_t *ray_in,
+             hit_record_t *rec,
              color_t *attenuation,
              ray_t *scattered) {
-  if (rec.material.class == 1) {
+  if (rec->material.class == 1) {
     return scatter_lambertian(rec, attenuation, scattered);
   }
-  if (rec.material.class == 2) {
+  if (rec->material.class == 2) {
     return scatter_metal(ray_in, rec, attenuation, scattered);
   }
-  if (rec.material.class == 3) {
+  if (rec->material.class == 3) {
     return scatter_dielectric(ray_in, rec, attenuation, scattered);
   }
   return false;
