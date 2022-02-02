@@ -149,7 +149,10 @@ bool scatter_metal(ray_t *ray_in,
   scattered->direction.y = reflected.y + rec->material.fuzz * rand.y;
   scattered->direction.z = reflected.z + rec->material.fuzz * rand.z;
   *attenuation = rec->material.albedo;
-  return (dot(reflected, rec->normal) > 0.0);
+
+  return (reflected.x * rec->normal.x +
+          reflected.y * rec->normal.y +
+          reflected.z * rec->normal.z) > 0.0;
 }
 
 // Wrapper function for all different scatterings
