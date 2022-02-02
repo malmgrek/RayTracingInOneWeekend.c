@@ -62,13 +62,13 @@ bool sphere_hit(hit_record_t *rec,
 
 }
 
-void hit(hit_record_t *rec, ray_t *ray, world_t world) {
+void hit(hit_record_t *rec, ray_t *ray, world_t *world) {
   rec->t = 1.0e12;  // = INFINITY
   rec->count = 0;
-  for (int i = 0; i < world.num_spheres; ++i) {
+  for (int i = 0; i < world->num_spheres; ++i) {
     // NOTE: Adding non-zero t_min has a huge effect on the image
     // darkness
-    sphere_hit(rec, world.spheres[i], ray, 1.0e-3, rec->t);
+    sphere_hit(rec, world->spheres[i], ray, 1.0e-3, rec->t);
   }
 }
 
