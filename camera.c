@@ -47,13 +47,26 @@ camera_t Camera(vec3_t lookfrom,
 
 void set_ray(ray_t *ray, camera_t *cam, double s, double t) {
   // TODO: Use only required cam attributes
-  vec3_t rd = mul(cam->lens_radius, random_in_unit_disk());
-  vec3_t offset = add(mul(rd.x, cam->u), mul(rd.y, cam->v));
-  ray->origin = add(cam->origin, offset);
-  // direction = lower_left_corner + s * horizontal + t * vertical - origin
-  ray->direction = add(add(cam->lower_left_corner,
-                           mul(s, cam->horizontal)),
-                       add(mul(t, cam->vertical),
-                           add(mul(-1.0, cam->origin),
-                               mul(-1.0, offset))));
+  vec3_t rand = random_in_unit_disk();
+  vec3_t rd;
+  rd.x = cam->lens_radius * rand.x;
+  rd.y = cam->lens_radius * rand.y;
+  rd.z = cam->lens_radius * rand.z;
+
+  vec3_t offset;
+  offset.x = rd.x * cam->u.x + rd.y * cam->v.x;
+  offset.y = rd.x * cam->u.y + rd.y * cam->v.y;
+  offset.z = rd.x * cam->u.z + rd.y * cam->v.z;
+
+  ray->origin.x = cam->origin.x + offset.x;
+  ray->origin.y = cam->origin.y + offset.y;
+  ray->origin.z = cam->origin.z + offset.z;
+
+  // direction = lower_left_corner + s * horizontal + t * vertical - origin - offset
+  ray->direction.x = cam->lower_left_corner.x + s * cam->horizontal.x +
+    t * cam->vertical.x - cam->origin.x - offset.x;
+  ray->direction.y = cam->lower_left_corner.y + s * cam->horizontal.y +
+    t * cam->vertical.y - cam->origin.y - offset.y;
+  ray->direction.z = cam->lower_left_corner.z + s * cam->horizontal.z +
+    t * cam->vertical.z - cam->origin.z - offset.z;
 }
