@@ -120,10 +120,11 @@ bool scatter_metal(ray_t *ray_in,
                    color_t *attenuation,
                    ray_t *scattered) {
   vec3_t reflected = reflect(unit_vector(&ray_in->direction), rec->normal);
+  vec3_t rand = random_in_unit_sphere();
   scattered->origin = rec->p;
-  scattered->direction = add(reflected,
-                             mul(rec->material.fuzz,
-                                 random_in_unit_sphere()));
+  scattered->direction.x = reflected.x + rec->material.fuzz * rand.x;
+  scattered->direction.y = reflected.y + rec->material.fuzz * rand.y;
+  scattered->direction.z = reflected.z + rec->material.fuzz * rand.z;
   *attenuation = rec->material.albedo;
   return (dot(reflected, rec->normal) > 0.0);
 }
