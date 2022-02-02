@@ -85,7 +85,7 @@ int main() {
       for (int q = 0; q < samples_per_pixel; ++q) {
         double s = (i + random_double_unit()) / (image_width - 1);
         double t = (j + random_double_unit()) / (image_height - 1);
-        ray = get_ray(cam, s, t);
+        set_ray(&ray, &cam, s, t);
         added_pixel_color = ray_color(&rec, &ray, world, max_depth);
         pixel_color.x += added_pixel_color.x;
         pixel_color.y += added_pixel_color.y;

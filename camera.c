@@ -45,18 +45,15 @@ camera_t Camera(vec3_t lookfrom,
   return cam;
 }
 
-ray_t get_ray(camera_t cam, double s, double t) {
+void set_ray(ray_t *ray, camera_t *cam, double s, double t) {
   // TODO: Use only required cam attributes
-  vec3_t rd = mul(cam.lens_radius, random_in_unit_disk());
-  vec3_t offset = add(mul(rd.x, cam.u), mul(rd.y, cam.v));
-  ray_t ray;
-  ray.origin = add(cam.origin, offset);
+  vec3_t rd = mul(cam->lens_radius, random_in_unit_disk());
+  vec3_t offset = add(mul(rd.x, cam->u), mul(rd.y, cam->v));
+  ray->origin = add(cam->origin, offset);
   // direction = lower_left_corner + s * horizontal + t * vertical - origin
-  ray.direction = add(add(cam.lower_left_corner,
-                          mul(s, cam.horizontal)),
-                      add(mul(t, cam.vertical),
-                          add(mul(-1.0, cam.origin),
-                              mul(-1.0, offset))));
-  return ray;
+  ray->direction = add(add(cam->lower_left_corner,
+                           mul(s, cam->horizontal)),
+                       add(mul(t, cam->vertical),
+                           add(mul(-1.0, cam->origin),
+                               mul(-1.0, offset))));
 }
-
