@@ -15,6 +15,32 @@ double dot(vec3_t u, vec3_t v) {
   return t;
 }
 
+double dot2(vec3_t *u, vec3_t *v) {
+  return u->x * v->x + u->y * v->y + u->z * v->z;
+}
+
+vec3_t mul2(double t, vec3_t *u) {
+  vec3_t v = { t * u->x, t * u->y, t * u->z };
+  return v;
+}
+
+vec3_t sub2(vec3_t *u, vec3_t *v) {
+  vec3_t w = { u->x - v->x, u->y - v->y, u->z - v->z };
+  return w;
+}
+
+vec3_t unit_vector2(vec3_t *u) {
+  double t = sqrt(dot2(u, u));
+  return mul2(1.0 / t, u);
+}
+
+vec3_t cross2(vec3_t *u, vec3_t *v) {
+  vec3_t w = { u->y * v->z - u->z * v->y,
+               u->z * v->x - u->x * v->z,
+               u->x * v->y - u->y * v->x };
+  return w;
+}
+
 double norm_squared(vec3_t u) {
   return dot(u, u);
 }
