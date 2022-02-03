@@ -67,6 +67,7 @@ int main() {
                         aperture,
                         dist_to_focus);
 
+  // Initialize loop variables
   world_t *world = example_scene();
   hit_record_t rec;
   ray_t ray;
@@ -76,13 +77,15 @@ int main() {
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
   for (int j = image_height-1; j >= 0; --j) {
-    /* Progress bar ------------------------------------------------------------ */
+
     // progress_bar(1.0 - (double) j / image_height);
-    /* ------------------------------------------------------------------------- */
+
     for (int i = 0; i < image_width; ++i) {
 
-
-      pixel_color = black;
+      // pixel_color = black;
+      pixel_color.x = 0.0;
+      pixel_color.y = 0.0;
+      pixel_color.z = 0.0;
       for (int q = 0; q < samples_per_pixel; ++q) {
         double s = (i + random_double_unit()) / (image_width - 1);
         double t = (j + random_double_unit()) / (image_height - 1);
