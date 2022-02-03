@@ -62,9 +62,6 @@ bool sphere_hit(hit_record_t *rec,
   rec->normal.y = (rec->p.y - sphere->center.y) / sphere->radius;
   rec->normal.z = (rec->p.z - sphere->center.z) / sphere->radius;
 
-  /* vec3_t outward_normal = mul(1.0 / sphere->radius, */
-  /*                             sub(rec->p, sphere->center)); */
-
   rec->front_face = (ray->direction.x * rec->normal.x +
                      ray->direction.y * rec->normal.y +
                      ray->direction.z * rec->normal.z) < 0.0;

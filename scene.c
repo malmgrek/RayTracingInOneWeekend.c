@@ -43,6 +43,8 @@ world_t *random_scene() {
 
   int n = 4;
   int c_max = sqrt(n_spheres - 3) / 2;
+  vec3_t unit1;
+  vec3_t unit2;
   for (int a = -c_max; a < c_max; a++) {
     for (int b = -c_max; b < c_max; b++) {
       double choose_mat = random_double_unit();
@@ -54,8 +56,9 @@ world_t *random_scene() {
       if (norm(&r) > 0.9) {
         if (choose_mat < 0.8) {
           // Diffuse
-          material = Material(0.0, 0.0, emul(random_vector_unit(),
-                                             random_vector_unit()), 1);
+          unit1 = random_vector_unit();
+          unit2 = random_vector_unit();
+          material = Material(0.0, 0.0, emul(&unit1, &unit2), 1);
         } else if (choose_mat < 0.95) {
           // Metal
           material = Material(0.0, random_double(0, 0.5),

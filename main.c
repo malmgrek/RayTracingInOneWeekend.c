@@ -20,20 +20,25 @@ color_t ray_color(hit_record_t *rec, ray_t *ray, world_t *world, int depth) {
 
   hit(rec, ray, world);
 
+  color_t color = { 0.0, 0.0, 0.0 };
   if (rec->count > 0) {
     color_t attenuation;
     ray_t scattered;
     if (scatter(ray, rec, &attenuation, &scattered)) {
       // TODO: Remove vector function
-      return emul(attenuation, ray_color(rec, &scattered, world, depth-1));
+      color = ray_color(rec, &scattered, world, depth-1);
+      color.x *= attenuation.x;
+      color.y *= attenuation.y;
+      color.z *= attenuation.z;
+      return color;
+      // return emul(attenuation, ray_color(rec, &scattered, world, depth-1));
     }
-    return black;
+    return color;
   }
 
   vec3_t unit = unit_vector(&ray->direction);
   double t = 0.5 * (unit.y + 1.0);
 
-  color_t color;
   color.x = (1.0 - t) * 1.0 + t * 0.5;
   color.y = (1.0 - t) * 1.0 + t * 0.7;
   color.z = (1.0 - t) * 1.0 + t * 1.0;
@@ -57,7 +62,7 @@ int main() {
   const vec3_t vup = { 0.0, 1.0, 0.0 };
   const double vfov = 20.0;
   const double aperture = 0.1;
-  // double dist_to_focus = norm(sub(lookfrom, lookat));
+  // One option: dist_to_focus = |lookfrom - lookat|;
   double dist_to_focus = 10.0;
   camera_t cam = Camera(lookfrom,
                         lookat,
