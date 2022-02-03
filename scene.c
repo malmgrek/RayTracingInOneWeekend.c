@@ -26,7 +26,7 @@ world_t *example_scene() {
 
 world_t *random_scene() {
 
-  int n_spheres = 36 + 3;
+  int n_spheres = 200 + 3;
   world_t *world = malloc(sizeof(world_t) +
                           (n_spheres+1) * sizeof(sphere_t));
   sphere_t *spheres = malloc((n_spheres+1) * sizeof(sphere_t));
@@ -50,7 +50,8 @@ world_t *random_scene() {
                        0.2,
                        b + 0.9 * random_double_unit());
       vec3_t p = Point(4.0, 0.2, 0.0);
-      if (norm(sub(c, p)) > 0.9) {
+      vec3_t r = sub2(&c, &p);
+      if (norm(&r) > 0.9) {
         if (choose_mat < 0.8) {
           // Diffuse
           material = Material(0.0, 0.0, emul(random_vector_unit(),

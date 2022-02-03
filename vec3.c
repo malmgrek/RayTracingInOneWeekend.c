@@ -50,8 +50,8 @@ double norm_squared(vec3_t u) {
   return dot(u, u);
 }
 
-double norm(vec3_t u) {
-  double t = sqrt(norm_squared(u));
+double norm(vec3_t *u) {
+  double t = sqrt(dot2(u, u));
   return t;
 }
 

@@ -25,7 +25,7 @@ vec3_t cross2(vec3_t *u, vec3_t *v);
 
 // Basic linear space operations
 double dot(vec3_t u, vec3_t v);
-double norm(vec3_t u);
+double norm(vec3_t *u);
 double norm_squared(vec3_t u);
 vec3_t add(vec3_t u, vec3_t v);
 vec3_t cross(vec3_t u, vec3_t v);
