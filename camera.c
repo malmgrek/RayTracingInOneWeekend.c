@@ -13,31 +13,29 @@ camera_t Camera(vec3_t lookfrom,
   double viewport_height = 2.0 * h;
   double viewport_width = aspect_ratio * viewport_height;
 
-  vec3_t tmp;
-  tmp.x = lookfrom.x - lookat.x;
-  tmp.y = lookfrom.y - lookat.y;
-  tmp.z = lookfrom.z - lookat.z;
-  vec3_t w = unit_vector(&tmp);
+  vec3_t tmp = sub2(&lookfrom, &lookat);
+  vec3_t w = unit_vector2(&tmp);
 
-  tmp = cross(vup, w);
-  vec3_t u = unit_vector(&tmp);
-  vec3_t v = cross(w, u);
+  tmp = cross2(&vup, &w);
+  vec3_t u = unit_vector2(&tmp);
+  vec3_t v = cross2(&w, &u);
 
   vec3_t origin = lookfrom;
-  vec3_t horizontal = mul(focus_dist * viewport_width, u);
-  vec3_t vertical = mul(focus_dist * viewport_height, v);
-  vec3_t lower_left_corner = add(add(origin,
-                                     mul(-0.5, horizontal)),
-                                 add(mul(-0.5, vertical),
-                                     mul(-1.0 * focus_dist, w)));
+  vec3_t horz = mul2(focus_dist * viewport_width, &u);
+  vec3_t vert = mul2(focus_dist * viewport_height, &v);
+
+  vec3_t lower_left_corner;
+  lower_left_corner.x = origin.x - horz.x/2.0 - vert.x/2.0 - focus_dist*w.x;
+  lower_left_corner.y = origin.y - horz.y/2.0 - vert.y/2.0 - focus_dist*w.y;
+  lower_left_corner.z = origin.z - horz.z/2.0 - vert.z/2.0 - focus_dist*w.z;
 
   // Instantiate camera_t type
   camera_t cam;
   cam.lower_left_corner = lower_left_corner;
-  cam.horizontal = horizontal;
-  cam.vertical = vertical;
+  cam.horizontal = horz;
+  cam.vertical = vert;
   cam.origin = origin;
-  cam.lens_radius = aperture / 2.0;
+  cam.lens_radius = aperture/2.0;
   cam.u = u;
   cam.v = v;
   cam.w = w;
