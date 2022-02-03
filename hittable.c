@@ -105,7 +105,11 @@ bool scatter_dielectric(ray_t *ray_in,
   double refraction_ratio = rec->front_face ? (1.0 / ir) : ir;
   vec3_t unit_direction = unit_vector(&ray_in->direction);
 
-  double cos_theta = fmin(dot(mul(-1.0, unit_direction), rec->normal), 1.0);
+  double cos_theta = fmin(-unit_direction.x * rec->normal.x
+                   -unit_direction.y * rec->normal.y
+                   -unit_direction.z * rec->normal.z,
+                   1.0);
+
   double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
   bool cannot_refract = refraction_ratio * sin_theta > 1.0;
   vec3_t direction;
