@@ -66,9 +66,9 @@ int main() {
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
   for (int j = image_height-1; j >= 0; --j) {
-    /* Progress bar ------------------------------------------------------------ */
-    progress_bar(1.0 - (double) j / image_height);
-    /* ------------------------------------------------------------------------- */
+
+    // progress_bar(1.0 - (double) j / image_height);
+
     for (int i = 0; i < image_width; ++i) {
 
 
