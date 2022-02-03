@@ -23,10 +23,9 @@ bool sphere_hit(hit_record_t *rec,
                 double t_min,
                 double t_max) {
 
-  vec3_t oc;
-  oc.x = ray->origin.x - sphere->center.x;
-  oc.y = ray->origin.y - sphere->center.y;
-  oc.z = ray->origin.z - sphere->center.z;
+  vec3_t oc = { ray->origin.x - sphere->center.x,
+                ray->origin.y - sphere->center.y,
+                ray->origin.z - sphere->center.z };
 
   double a =
     ray->direction.x * ray->direction.x +
@@ -112,9 +111,9 @@ bool scatter_dielectric(ray_t *ray_in,
   vec3_t direction;
   if (cannot_refract ||
       reflectance(cos_theta, refraction_ratio) > random_double_unit()) {
-    direction = reflect(unit_direction, rec->normal);
+    direction = reflect(&unit_direction, &rec->normal);
   } else {
-    direction = refract(unit_direction, rec->normal, refraction_ratio);
+    direction = refract(&unit_direction, &rec->normal, refraction_ratio);
   }
 
   scattered->origin = rec->p;
@@ -125,10 +124,11 @@ bool scatter_dielectric(ray_t *ray_in,
 bool scatter_lambertian(hit_record_t *rec,
                         color_t *attenuation,
                         ray_t *scattered) {
-  vec3_t scatter_direction = add(rec->normal, random_on_unit_sphere());
+  vec3_t rand = random_on_unit_sphere();
+  vec3_t scatter_direction = add2(&rec->normal, &rand);
 
   // Catch degenerate scatter direction
-  if (near_zero(scatter_direction)) {
+  if (near_zero(&scatter_direction)) {
     scatter_direction = rec->normal;
   }
 
@@ -142,7 +142,8 @@ bool scatter_metal(ray_t *ray_in,
                    hit_record_t *rec,
                    color_t *attenuation,
                    ray_t *scattered) {
-  vec3_t reflected = reflect(unit_vector(&ray_in->direction), rec->normal);
+  vec3_t unit = unit_vector(&ray_in->direction);
+  vec3_t reflected = reflect(&unit, &rec->normal);
   vec3_t rand = random_in_unit_sphere();
   scattered->origin = rec->p;
   scattered->direction.x = reflected.x + rec->material.fuzz * rand.x;
