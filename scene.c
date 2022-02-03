@@ -52,7 +52,7 @@ world_t *random_scene() {
                        0.2,
                        b + 0.9 * random_double_unit());
       vec3_t p = Point(4.0, 0.2, 0.0);
-      vec3_t r = sub2(&c, &p);
+      vec3_t r = sub(&c, &p);
       if (norm(&r) > 0.9) {
         if (choose_mat < 0.8) {
           // Diffuse

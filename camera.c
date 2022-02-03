@@ -13,16 +13,16 @@ camera_t Camera(vec3_t lookfrom,
   double viewport_height = 2.0 * h;
   double viewport_width = aspect_ratio * viewport_height;
 
-  vec3_t tmp = sub2(&lookfrom, &lookat);
-  vec3_t w = unit_vector2(&tmp);
+  vec3_t tmp = sub(&lookfrom, &lookat);
+  vec3_t w = unit_vector(&tmp);
 
-  tmp = cross2(&vup, &w);
-  vec3_t u = unit_vector2(&tmp);
-  vec3_t v = cross2(&w, &u);
+  tmp = cross(&vup, &w);
+  vec3_t u = unit_vector(&tmp);
+  vec3_t v = cross(&w, &u);
 
   vec3_t origin = lookfrom;
-  vec3_t horz = mul2(focus_dist * viewport_width, &u);
-  vec3_t vert = mul2(focus_dist * viewport_height, &v);
+  vec3_t horz = mul(focus_dist * viewport_width, &u);
+  vec3_t vert = mul(focus_dist * viewport_height, &v);
 
   vec3_t lower_left_corner;
   lower_left_corner.x = origin.x - horz.x/2.0 - vert.x/2.0 - focus_dist*w.x;

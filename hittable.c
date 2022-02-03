@@ -126,7 +126,7 @@ bool scatter_lambertian(hit_record_t *rec,
                         color_t *attenuation,
                         ray_t *scattered) {
   vec3_t rand = random_on_unit_sphere();
-  vec3_t scatter_direction = add2(&rec->normal, &rand);
+  vec3_t scatter_direction = add(&rec->normal, &rand);
 
   // Catch degenerate scatter direction
   if (near_zero(&scatter_direction)) {

@@ -10,31 +10,26 @@ vec3_t Point(double x, double y, double z) {
   return u;
 }
 
-double dot2(vec3_t *u, vec3_t *v) {
+double dot(vec3_t *u, vec3_t *v) {
   return u->x * v->x + u->y * v->y + u->z * v->z;
 }
 
-vec3_t mul2(double t, vec3_t *u) {
+vec3_t mul(double t, vec3_t *u) {
   vec3_t v = { t * u->x, t * u->y, t * u->z };
   return v;
 }
 
-vec3_t add2(vec3_t *u, vec3_t *v) {
+vec3_t add(vec3_t *u, vec3_t *v) {
   vec3_t w = { u->x + v->x, u->y + v->y, u->z + v->z };
   return w;
 }
 
-vec3_t sub2(vec3_t *u, vec3_t *v) {
+vec3_t sub(vec3_t *u, vec3_t *v) {
   vec3_t w = { u->x - v->x, u->y - v->y, u->z - v->z };
   return w;
 }
 
-vec3_t unit_vector2(vec3_t *u) {
-  double t = sqrt(dot2(u, u));
-  return mul2(1.0 / t, u);
-}
-
-vec3_t cross2(vec3_t *u, vec3_t *v) {
+vec3_t cross(vec3_t *u, vec3_t *v) {
   vec3_t w = { u->y * v->z - u->z * v->y,
                u->z * v->x - u->x * v->z,
                u->x * v->y - u->y * v->x };
@@ -42,7 +37,7 @@ vec3_t cross2(vec3_t *u, vec3_t *v) {
 }
 
 double norm(vec3_t *u) {
-  double t = sqrt(dot2(u, u));
+  double t = sqrt(dot(u, u));
   return t;
 }
 
@@ -76,7 +71,7 @@ vec3_t random_vector(double min, double max) {
 
 vec3_t random_in_unit_disk() {
   vec3_t p = { random_double(-1.0, 1.0), random_double(-1.0, 1.0), 0.0 };
-  if (dot2(&p, &p) < 1.0) {
+  if (dot(&p, &p) < 1.0) {
     return p;
   } else {
     return random_in_unit_disk();
@@ -85,7 +80,7 @@ vec3_t random_in_unit_disk() {
 
 vec3_t random_in_unit_sphere() {
   vec3_t p = random_vector(-1.0, 1.0);
-  if (dot2(&p, &p) < 1.0) {
+  if (dot(&p, &p) < 1.0) {
     return p;
   } else {
     return random_in_unit_sphere();
@@ -102,7 +97,7 @@ bool near_zero(vec3_t *u) {
 }
 
 vec3_t reflect(vec3_t *u, vec3_t *n) {
-  double t = dot2(u, n);
+  double t = dot(u, n);
   // vec3_t v = u - 2.0 * (u.n)n
   vec3_t v = {u->x - 2.0 * t * n->x,
                u->y - 2.0 * t * n->y,
