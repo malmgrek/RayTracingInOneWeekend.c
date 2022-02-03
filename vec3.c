@@ -111,7 +111,7 @@ vec3_t random_in_unit_disk() {
 
 vec3_t random_in_unit_sphere() {
   vec3_t p = random_vector(-1.0, 1.0);
-  if (norm_squared(p) < 1.0) {
+  if (dot2(&p, &p) < 1.0) {
     return p;
   } else {
     return random_in_unit_sphere();
