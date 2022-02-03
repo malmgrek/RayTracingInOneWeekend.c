@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "vec3.h"
 
+// TODO: All stack inputs to pointers
 // TODO: Refactor to reasonable modules
 // TODO: Makefile
 // TODO: Readme
