@@ -23,9 +23,9 @@ bool sphere_hit(hit_record_t *rec,
                 double t_min,
                 double t_max) {
 
-  vec3_t oc = { ray->origin.x - sphere->center.x,
-                ray->origin.y - sphere->center.y,
-                ray->origin.z - sphere->center.z };
+  double oc_x = ray->origin.x - sphere->center.x;
+  double oc_y = ray->origin.y - sphere->center.y;
+  double oc_z = ray->origin.z - sphere->center.z;
 
   double a =
     ray->direction.x * ray->direction.x +
@@ -33,12 +33,12 @@ bool sphere_hit(hit_record_t *rec,
     ray->direction.z * ray->direction.z;
 
   double half_b =
-    oc.x * ray->direction.x +
-    oc.y * ray->direction.y +
-    oc.z * ray->direction.z;
+    oc_x * ray->direction.x +
+    oc_y * ray->direction.y +
+    oc_z * ray->direction.z;
 
   double c =
-    oc.x*oc.x + oc.y*oc.y + oc.z*oc.z -
+    oc_x*oc_x + oc_y*oc_y + oc_z*oc_z -
     sphere->radius*sphere->radius;
 
   double discr = half_b * half_b - a * c;

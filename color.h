@@ -11,8 +11,4 @@ color_t Color(double r, double g, double b);
 
 void write_color(color_t *pixel_color, int samples_per_pixel);
 
-extern const color_t black;
-extern const color_t white;
-extern const color_t lightblue;
-
 #endif // COLOR_H_

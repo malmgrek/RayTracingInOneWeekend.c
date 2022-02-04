@@ -1,9 +1,5 @@
 #include "color.h"
 
-const color_t black = { 0.0, 0.0, 0.0 };
-const color_t white = { 1.0, 1.0, 1.0 };
-const color_t lightblue = { 0.5, 0.7, 1.0 };
-
 color_t Color(double r, double g, double b) {
   color_t color = { r, g, b };
   return color;
