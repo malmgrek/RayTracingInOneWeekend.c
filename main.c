@@ -50,9 +50,9 @@ int main() {
 
   /* Image */
   const double aspect_ratio = 3.0 / 2.0;
-  const int image_width = 400;
+  const int image_width = 1200;
   const int image_height = (int) (image_width / aspect_ratio);
-  const int samples_per_pixel = 4;
+  const int samples_per_pixel = 10;
   const int max_depth = 50;
 
   /* Camera */
@@ -72,11 +72,13 @@ int main() {
                         dist_to_focus);
 
   // Initialize loop variables
-  world_t *world = example_scene();
+  world_t *world = random_scene();
   hit_record_t rec;
   ray_t ray;
   color_t pixel_color;
   color_t added_pixel_color;
+  double s;
+  double t;
 
   /* Render */
   printf("P3\n%d %d\n255\n", image_width, image_height);
@@ -91,8 +93,8 @@ int main() {
       pixel_color.y = 0.0;
       pixel_color.z = 0.0;
       for (int q = 0; q < samples_per_pixel; ++q) {
-        double s = (i + random_double_unit()) / (image_width - 1);
-        double t = (j + random_double_unit()) / (image_height - 1);
+        s = (i + random_double_unit()) / (image_width - 1);
+        t = (j + random_double_unit()) / (image_height - 1);
         set_ray(&ray, &cam, s, t);
         added_pixel_color = ray_color(&rec, &ray, world, max_depth);
         pixel_color.x += added_pixel_color.x;

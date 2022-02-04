@@ -15,7 +15,7 @@ world_t *example_scene() {
   /* spheres[3] = Sphere(Point(-1.0, 0.0, -0.3), -0.4, */
   /*                     Material(1.5, 0.0, Color(1.0, 1.0, 1.0), 3)); */
   spheres[3] = Sphere(Point(1.0, 0.0, -1.0), 0.5,
-                      Material(0.0, 0.0, Color(0.8, 0.6, 0.2), 2));
+                      Material(0.0, 0.0, Color(0.9, 0.9, 0.9), 1));
 
   world->spheres = spheres;
   world->num_spheres = 4;
@@ -26,7 +26,7 @@ world_t *example_scene() {
 
 world_t *random_scene() {
 
-  int n_spheres = 200 + 3;
+  int n_spheres = 121 + 3;
   world_t *world = malloc(sizeof(world_t) +
                           (n_spheres+1) * sizeof(sphere_t));
   sphere_t *spheres = malloc((n_spheres+1) * sizeof(sphere_t));
