@@ -4,3 +4,6 @@
 tmp/
 
 *.ppm
+*.out
+main
+prof_output
