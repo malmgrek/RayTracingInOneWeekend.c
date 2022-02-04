@@ -53,32 +53,32 @@ world_t World(sphere_t *spheres, int num_spheres);
 // ------------- Hit checking ----------------------
 
 bool sphere_hit(hit_record_t *red,
-                sphere_t sphere,
-                ray_t ray,
+                sphere_t *sphere,
+                ray_t *ray,
                 double t_min,
                 double t_max);
 
 
-hit_record_t hit(ray_t ray, world_t world);
+void hit(hit_record_t *rec, ray_t *ray, world_t *world);
 
 // ------------- Scattering ------------------------
 
-bool scatter_dielectric(ray_t ray_in,
-                        hit_record_t rec,
+bool scatter_dielectric(ray_t *ray_in,
+                        hit_record_t *rec,
                         color_t *attenuation,
                         ray_t *scattered);
 
-bool scatter_lambertian(hit_record_t rec,
+bool scatter_lambertian(hit_record_t *rec,
                         color_t *attenuation,
                         ray_t *scattered);
 
-bool scatter_metal(ray_t ray_in,
-                   hit_record_t rec,
+bool scatter_metal(ray_t *ray_in,
+                   hit_record_t *rec,
                    color_t *attenuation,
                    ray_t *scattered);
 
-bool scatter(ray_t ray_in,
-             hit_record_t rec,
+bool scatter(ray_t *ray_in,
+             hit_record_t *rec,
              color_t *attenuation,
              ray_t *scattered);
 

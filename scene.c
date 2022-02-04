@@ -15,7 +15,7 @@ world_t *example_scene() {
   /* spheres[3] = Sphere(Point(-1.0, 0.0, -0.3), -0.4, */
   /*                     Material(1.5, 0.0, Color(1.0, 1.0, 1.0), 3)); */
   spheres[3] = Sphere(Point(1.0, 0.0, -1.0), 0.5,
-                      Material(0.0, 0.0, Color(0.8, 0.6, 0.2), 2));
+                      Material(0.0, 0.0, Color(0.9, 0.9, 0.9), 1));
 
   world->spheres = spheres;
   world->num_spheres = 4;
@@ -26,7 +26,7 @@ world_t *example_scene() {
 
 world_t *random_scene() {
 
-  int n_spheres = 36 + 3;
+  int n_spheres = 121 + 3;
   world_t *world = malloc(sizeof(world_t) +
                           (n_spheres+1) * sizeof(sphere_t));
   sphere_t *spheres = malloc((n_spheres+1) * sizeof(sphere_t));
@@ -43,6 +43,8 @@ world_t *random_scene() {
 
   int n = 4;
   int c_max = sqrt(n_spheres - 3) / 2;
+  vec3_t unit1;
+  vec3_t unit2;
   for (int a = -c_max; a < c_max; a++) {
     for (int b = -c_max; b < c_max; b++) {
       double choose_mat = random_double_unit();
@@ -50,11 +52,13 @@ world_t *random_scene() {
                        0.2,
                        b + 0.9 * random_double_unit());
       vec3_t p = Point(4.0, 0.2, 0.0);
-      if (norm(sub(c, p)) > 0.9) {
+      vec3_t r = sub(&c, &p);
+      if (norm(&r) > 0.9) {
         if (choose_mat < 0.8) {
           // Diffuse
-          material = Material(0.0, 0.0, emul(random_vector_unit(),
-                                             random_vector_unit()), 1);
+          unit1 = random_vector_unit();
+          unit2 = random_vector_unit();
+          material = Material(0.0, 0.0, emul(&unit1, &unit2), 1);
         } else if (choose_mat < 0.95) {
           // Metal
           material = Material(0.0, random_double(0, 0.5),

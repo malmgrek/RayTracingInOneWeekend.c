@@ -2,7 +2,7 @@
 #include "vec3.h"
 
 void progress_bar(double rate) {
-  char bar[12];
+  char bar[13];
   bar[0] = '[';
   bar[11] = ']';
   for (int i = 1; i <= 10; i++) {
