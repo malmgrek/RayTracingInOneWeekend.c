@@ -8,11 +8,6 @@
 #include "utils.h"
 #include "vec3.h"
 
-// TODO: Refactor to reasonable modules
-// TODO: Makefile
-// TODO: Readme
-// TODO: GitHub
-
 color_t ray_color(hit_record_t *rec, ray_t *ray, world_t *world, int depth) {
 
   color_t color = { 0.0, 0.0, 0.0 };
@@ -58,10 +53,10 @@ int main(int argc, char *argv[]) {
   }
 
   /* Image */
-  const double aspect_ratio = 3.0 / 2.0;
+  const double aspect_ratio = 16.0 / 9.0;
   const int image_width = 400;
   const int image_height = (int) (image_width / aspect_ratio);
-  const int samples_per_pixel = 4;
+  const int samples_per_pixel = 50;
   const int max_depth = 50;
 
   /* Camera */
@@ -81,7 +76,7 @@ int main(int argc, char *argv[]) {
                         dist_to_focus);
 
   // Initialize loop variables
-  world_t *world = example_scene();
+  world_t *world = random_scene();
   hit_record_t rec;
   ray_t ray;
   color_t pixel_color;

@@ -2,6 +2,7 @@
 .idea
 *.log
 tmp/
+build/
 
 *.ppm
 *.out
