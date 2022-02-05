@@ -1,7 +1,7 @@
 #include "camera.h"
 #include "color.h"
-#include "hittable.h"
 #include "ray.h"
+#include "scatter.h"
 #include "scene.h"
 #include "utils.h"
 #include "vec3.h"

@@ -1,5 +1,5 @@
-#ifndef HITTABLE_H_
-#define HITTABLE_H_
+#ifndef SCATTER_H_
+#define SCATTER_H_
 
 #include "color.h"
 #include "ray.h"
@@ -84,4 +84,4 @@ bool scatter(ray_t *ray_in,
 
 void destroy_world(world_t *world);
 
-#endif // HITTABLE_H_
+#endif // SCATTER_H_

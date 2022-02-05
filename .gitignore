@@ -7,3 +7,5 @@ tmp/
 *.out
 main
 prof_output
+
+README.html

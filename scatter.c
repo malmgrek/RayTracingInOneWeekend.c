@@ -1,4 +1,4 @@
-#include "hittable.h"
+#include "scatter.h"
 
 material_t Material(double ir, double fuzz, vec3_t albedo, int class) {
   material_t mat;
