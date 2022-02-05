@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "camera.h"
 #include "color.h"
 #include "ray.h"
@@ -46,7 +48,14 @@ color_t ray_color(hit_record_t *rec, ray_t *ray, world_t *world, int depth) {
 
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+  bool show_progress_bar = false;
+  if (argc > 1) {
+    if (strcmp(argv[1], "--bar") == 0) {
+      show_progress_bar = true;
+    }
+  }
 
   /* Image */
   const double aspect_ratio = 3.0 / 2.0;
@@ -84,7 +93,9 @@ int main() {
   printf("P3\n%d %d\n255\n", image_width, image_height);
   for (int j = image_height-1; j >= 0; --j) {
 
-    // progress_bar(1.0 - (double) j / image_height);
+    if (show_progress_bar) {
+      progress_bar(1.0 - (double) j / image_height);
+    }
 
     for (int i = 0; i < image_width; ++i) {
 
