@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 void progress_bar(double rate);
 double degrees_to_radians(double degrees);

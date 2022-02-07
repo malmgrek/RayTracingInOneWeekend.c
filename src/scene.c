@@ -26,6 +26,9 @@ world_t *example_scene() {
 
 world_t *random_scene() {
 
+  /* Random seed */
+  srand( time(NULL) );
+
   int n_spheres = 121 + 3;
   world_t *world = malloc(sizeof(world_t) +
                           (n_spheres+1) * sizeof(sphere_t));
