@@ -1,50 +1,21 @@
 #include "scatter.h"
 
-material_t Material(double ir, double fuzz, vec3_t albedo, int class) {
-  material_t mat;
-  mat.index_of_refraction = ir;
-  mat.fuzz = fuzz;
-  mat.albedo = albedo;
-  mat.class = class;
-  return mat;
-}
-
-sphere_t Sphere(vec3_t center, double radius, material_t material) {
-  sphere_t sp;
-  sp.center = center;
-  sp.radius = radius;
-  sp.material = material;
-  return sp;
-}
-
 bool sphere_hit(hit_record_t *rec,
-                sphere_t *sphere,
-                ray_t *ray,
+                const sphere_t *sphere,
+                const ray_t *ray,
                 double t_min,
                 double t_max) {
 
-  double oc_x = ray->origin.x - sphere->center.x;
-  double oc_y = ray->origin.y - sphere->center.y;
-  double oc_z = ray->origin.z - sphere->center.z;
-
-  double a =
-    ray->direction.x * ray->direction.x +
-    ray->direction.y * ray->direction.y +
-    ray->direction.z * ray->direction.z;
-
-  double half_b =
-    oc_x * ray->direction.x +
-    oc_y * ray->direction.y +
-    oc_z * ray->direction.z;
-
-  double c =
-    oc_x*oc_x + oc_y*oc_y + oc_z*oc_z -
-    sphere->radius*sphere->radius;
-
+  vec3_t oc = sub(&ray->origin, &sphere->center);
+  double a = dot(&ray->direction, &ray->direction);
+  double half_b = dot(&oc, &ray->direction);
+  double c = dot(&oc, &oc) - sphere->radius * sphere->radius;
   double discr = half_b * half_b - a * c;
+
   if (discr < 0) {
     return false;
   }
+
   double sqrtd = sqrt(discr);
 
   // Find the nearest root that lies in the acceptable range
@@ -58,30 +29,22 @@ bool sphere_hit(hit_record_t *rec,
 
   rec->t = root;
   rec->p = ray_at(ray, root);
-  rec->normal.x = (rec->p.x - sphere->center.x) / sphere->radius;
-  rec->normal.y = (rec->p.y - sphere->center.y) / sphere->radius;
-  rec->normal.z = (rec->p.z - sphere->center.z) / sphere->radius;
-
-  rec->front_face = (ray->direction.x * rec->normal.x +
-                     ray->direction.y * rec->normal.y +
-                     ray->direction.z * rec->normal.z) < 0.0;
+  vec3_t temp = sub(&rec->p, &sphere->center);
+  rec->normal = mul(1 / sphere->radius, &temp);
+  rec->front_face = dot(&ray->direction, &rec->normal) < 0.0;
 
   if (!rec->front_face) {
-    rec->normal.x *= -1.0;
-    rec->normal.y *= -1.0;
-    rec->normal.z *= -1.0;
+    rec->normal = mul(-1.0, &rec->normal);
   }
 
   rec->material = sphere->material;
-
-  // Count as hit if all ok
-  rec->count += 1;
+  rec->count += 1;  // Count as hit if all ok
 
   return true;
 
 }
 
-void hit(hit_record_t *rec, ray_t *ray, world_t *world) {
+void hit(hit_record_t *rec, const ray_t *ray, const world_t *world) {
   rec->t = INFINITY;
   rec->count = 0;
   for (int i = 0; i < world->num_spheres; ++i) {
