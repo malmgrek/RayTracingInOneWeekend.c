@@ -15,7 +15,6 @@ project ( RTWeekendC
 set ( SOURCE_CODE
   src/camera.c
   src/color.h
-  src/color.c
   src/ray.h
   src/scatter.h
   src/scatter.c

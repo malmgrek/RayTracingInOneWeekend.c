@@ -23,6 +23,6 @@ camera_t Camera(vec3_t lookfrom,
                 double aperture,
                 double focus_dist);
 
-void set_ray(ray_t *ray, camera_t *cam, double s, double t);
+void set_ray(ray_t *ray, const camera_t *cam, double s, double t);
 
 #endif // CAMERA_H_
