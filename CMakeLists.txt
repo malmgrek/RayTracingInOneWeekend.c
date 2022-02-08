@@ -25,7 +25,6 @@ set ( SOURCE_CODE
   src/utils.h
   src/utils.c
   src/vec3.h
-  src/vec3.c
   src/main.c
 )
 

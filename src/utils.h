@@ -1,11 +1,11 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include "vec3.h"
 
 #define PI 3.1415926535897932385
 #define DEG2RAD(degrees) (((degrees) * PI) / 180.0)

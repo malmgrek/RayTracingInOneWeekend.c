@@ -61,7 +61,7 @@ world_t *random_scene() {
           // Diffuse
           unit1 = random_vector_unit();
           unit2 = random_vector_unit();
-          material = Material(0.0, 0.0, emul(&unit1, &unit2), 1);
+          material = Material(0.0, 0.0, elementwise_mul(&unit1, &unit2), 1);
         } else if (choose_mat < 0.95) {
           // Metal
           material = Material(0.0, RANDOM_DOUBLE(0, 0.5),
