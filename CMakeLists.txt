@@ -17,7 +17,6 @@ set ( SOURCE_CODE
   src/color.h
   src/color.c
   src/ray.h
-  src/ray.c
   src/scatter.h
   src/scatter.c
   src/scene.h
