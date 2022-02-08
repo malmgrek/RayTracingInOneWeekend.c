@@ -67,24 +67,24 @@ void hit(hit_record_t *rec, const ray_t *ray, const world_t *world);
 
 // ------------- Scattering ------------------------
 
-bool scatter_dielectric(ray_t *ray_in,
-                        hit_record_t *rec,
-                        color_t *attenuation,
-                        ray_t *scattered);
+bool scatter_dielectric(color_t *attenuation,
+                        ray_t *scattered,
+                        const ray_t *ray_in,
+                        const hit_record_t *rec);
 
-bool scatter_lambertian(hit_record_t *rec,
-                        color_t *attenuation,
-                        ray_t *scattered);
+bool scatter_lambertian(color_t *attenuation,
+                        ray_t *scattered,
+                        const hit_record_t *rec);
 
-bool scatter_metal(ray_t *ray_in,
-                   hit_record_t *rec,
-                   color_t *attenuation,
-                   ray_t *scattered);
+bool scatter_metal(color_t *attenuation,
+                   ray_t *scattered,
+                   const ray_t *ray_in,
+                   const hit_record_t *rec);
 
-bool scatter(ray_t *ray_in,
-             hit_record_t *rec,
-             color_t *attenuation,
-             ray_t *scattered);
+bool scatter(color_t *attenuation,
+             ray_t *scattered,
+             const ray_t *ray_in,
+             const hit_record_t *rec);
 
 void destroy_world(world_t *world);
 

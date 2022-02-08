@@ -30,7 +30,7 @@ color_t ray_color(hit_record_t *rec, ray_t *ray, world_t *world, int depth) {
   if (rec->count > 0) {
     color_t attenuation;
     ray_t scattered;
-    if (scatter(ray, rec, &attenuation, &scattered)) {
+    if (scatter(&attenuation, &scattered, ray, rec)) {
       color = ray_color(rec, &scattered, world, depth-1);
       return elementwise_mul(&attenuation, &color);
     }
