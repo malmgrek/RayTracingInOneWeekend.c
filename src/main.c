@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
   const double aspect_ratio = 16.0 / 9.0;
   const int image_width = 400;
   const int image_height = (int) (image_width / aspect_ratio);
-  const int samples_per_pixel = 50;
+  const int samples_per_pixel = 4;
   const int max_depth = 50;
 
   /* Camera */
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
                         dist_to_focus);
 
   // Initialize loop variables
-  world_t *world = random_scene();
+  world_t *world = example_scene();
   hit_record_t rec;
   ray_t ray;
   color_t pixel_color;
@@ -101,8 +101,8 @@ int main(int argc, char *argv[]) {
 
       for (int q = 0; q < samples_per_pixel; ++q) {
 
-        s = (i + random_double_unit()) / (image_width - 1);
-        t = (j + random_double_unit()) / (image_height - 1);
+        s = (i + RANDOM_DOUBLE_UNIT) / (image_width - 1);
+        t = (j + RANDOM_DOUBLE_UNIT) / (image_height - 1);
         set_ray(&ray, &cam, s, t);
         added_pixel_color = ray_color(&rec, &ray, world, max_depth);
         pixel_color.x += added_pixel_color.x;

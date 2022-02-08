@@ -50,10 +50,10 @@ world_t *random_scene() {
   vec3_t unit2;
   for (int a = -c_max; a < c_max; a++) {
     for (int b = -c_max; b < c_max; b++) {
-      double choose_mat = random_double_unit();
-      vec3_t c = Point(a + 0.9 * random_double_unit(),
+      double choose_mat = RANDOM_DOUBLE_UNIT;
+      vec3_t c = Point(a + 0.9 * RANDOM_DOUBLE_UNIT,
                        0.2,
-                       b + 0.9 * random_double_unit());
+                       b + 0.9 * RANDOM_DOUBLE_UNIT);
       vec3_t p = Point(4.0, 0.2, 0.0);
       vec3_t r = sub(&c, &p);
       if (norm(&r) > 0.9) {
@@ -64,7 +64,7 @@ world_t *random_scene() {
           material = Material(0.0, 0.0, emul(&unit1, &unit2), 1);
         } else if (choose_mat < 0.95) {
           // Metal
-          material = Material(0.0, random_double(0, 0.5),
+          material = Material(0.0, RANDOM_DOUBLE(0, 0.5),
                               random_vector(0.5, 1.0), 2);
         } else {
           // Glass

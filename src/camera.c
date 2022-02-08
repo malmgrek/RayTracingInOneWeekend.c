@@ -8,7 +8,7 @@ camera_t Camera(vec3_t lookfrom,
                 double aspect_ratio,
                 double aperture,
                 double focus_dist) {
-  double theta = degrees_to_radians(vfov);
+  double theta = DEG2RAD(vfov);
   double h = tan(theta / 2.0);
   double viewport_height = 2.0 * h;
   double viewport_width = aspect_ratio * viewport_height;

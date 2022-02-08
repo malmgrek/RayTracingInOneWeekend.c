@@ -56,21 +56,21 @@ vec3_t unit_vector(vec3_t *direction) {
 }
 
 vec3_t random_vector_unit() {
-  vec3_t u = { random_double_unit(),
-               random_double_unit(),
-               random_double_unit() };
+  vec3_t u = { RANDOM_DOUBLE_UNIT,
+               RANDOM_DOUBLE_UNIT,
+               RANDOM_DOUBLE_UNIT };
   return u;
 }
 
 vec3_t random_vector(double min, double max) {
-  vec3_t u = { random_double(min, max),
-               random_double(min, max),
-               random_double(min, max) };
+  vec3_t u = { RANDOM_DOUBLE(min, max),
+               RANDOM_DOUBLE(min, max),
+               RANDOM_DOUBLE(min, max) };
   return u;
 }
 
 vec3_t random_in_unit_disk() {
-  vec3_t p = { random_double(-1.0, 1.0), random_double(-1.0, 1.0), 0.0 };
+  vec3_t p = { RANDOM_DOUBLE(-1.0, 1.0), RANDOM_DOUBLE(-1.0, 1.0), 0.0 };
   if (dot(&p, &p) < 1.0) {
     return p;
   } else {
