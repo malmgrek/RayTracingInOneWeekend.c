@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
   hit_record_t rec;
   ray_t ray;
   color_t pixel_color;
-  color_t added_pixel_color;
+  color_t acc_pixel_color;
   double s;
   double t;
 
@@ -94,23 +94,21 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < IMAGE_WIDTH; ++i) {
 
       // Start from black pixel
-      pixel_color.x = 0.0;
-      pixel_color.y = 0.0;
-      pixel_color.z = 0.0;
+      acc_pixel_color.x = 0.0;
+      acc_pixel_color.y = 0.0;
+      acc_pixel_color.z = 0.0;
 
       for (int q = 0; q < SAMPLES_PER_PIXEL; ++q) {
 
         s = (i + RANDOM_DOUBLE_UNIT) / (IMAGE_WIDTH - 1);
         t = (j + RANDOM_DOUBLE_UNIT) / (IMAGE_HEIGHT - 1);
         set_ray(&ray, &cam, s, t);
-        added_pixel_color = ray_color(&rec, &ray, world, MAX_DEPTH);
-        pixel_color.x += added_pixel_color.x;
-        pixel_color.y += added_pixel_color.y;
-        pixel_color.z += added_pixel_color.z;
+        pixel_color = ray_color(&rec, &ray, world, MAX_DEPTH);
+        acc_pixel_color = add(&acc_pixel_color, &pixel_color);
 
       }
 
-      write_color(&pixel_color, SAMPLES_PER_PIXEL);
+      write_color(&acc_pixel_color, SAMPLES_PER_PIXEL);
 
     }
 
