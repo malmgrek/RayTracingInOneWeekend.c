@@ -8,10 +8,10 @@
 #include "utils.h"
 #include "vec3.h"
 
-#define ASPECT_RATIO (16.0 / 9.0)
-#define IMAGE_WIDTH 400
+#define ASPECT_RATIO (3.0 / 2.0)
+#define IMAGE_WIDTH 800
 #define IMAGE_HEIGHT (int) (IMAGE_WIDTH / ASPECT_RATIO)
-#define SAMPLES_PER_PIXEL 4
+#define SAMPLES_PER_PIXEL 50
 #define MAX_DEPTH 50
 #define VFOV 20.0
 #define APERTURE 0.1
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
                         dist_to_focus);
 
   // Initialize loop variables
-  world_t *world = example_scene();
+  world_t *world = random_scene();
   hit_record_t rec;
   ray_t ray;
   color_t pixel_color;
