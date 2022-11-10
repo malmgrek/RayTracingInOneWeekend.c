@@ -18,7 +18,7 @@ git clone https://github.com/malmgrek/RayTracingInOneWeekend.c
 Build with CMake (from the project directory root), make, and run:
 
 ``` shell
-cmake -B build && (cd build && make) && ./build/inOneWeekend --bar > test.ppm
+cmake -B build && (cd build && make) && ./build/inOneWeekendC --bar > test.ppm
 ```
 
 Optionally show image:
