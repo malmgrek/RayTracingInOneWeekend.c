@@ -4,8 +4,8 @@ This project is my implementation of the fantastic ray tracing project [Ray
 Tracing on One
 Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html "Link to
 book") by Peter Shirley. The original ray tracer (and it's extensions) are
-implemented in C++ but I wanted to write a ray tracer in C instead. Defining
-linear algebra operations without OOP and operator overloading is painful.
+implemented in C++ but I wanted to write a ray tracer in plain C instead. Thus, all physics calculations implementations are very different since OOP
+and operator overloading are unavailable.
 
 ## Installation
 
